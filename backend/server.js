@@ -1,19 +1,46 @@
+require('dotenv').config()
+
 const express = require('express')
-const app = express()
+const cors = require("cors");
+const router = require("./router/mainRouter");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const logger = require("./logger/logger");
+const app = express();
 
-const posts = [
-    {
-        username: 'username1',
-        title: 'Post 1'
-    },
-    {
-        username: 'username2',
-        title: 'Post 2'
-    }
-]
+app.use(express.json())
+app.use(
+    cors({
+        origin: '*',
+        methods: ["GET", "POST", "PUT"],
+        credentials: true,
+    })
+)
 
-app.get('/posts', (req, res) => {
-    res.json(posts)
-})
+// set & reset login cookies
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(3000)
+//Adds session for each user login
+app.use(
+    session({
+        key: "userId",
+        secret: "subscribe",
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+        maxAge: 60 * 60 * 1000,
+        },
+    })
+);
+
+//All node server requests handled here.
+app.use("/", router);
+
+
+app.listen(3000, () => {
+    console.log("running server");
+});
+
+//Logging log4js
+app.use(logger.express);
