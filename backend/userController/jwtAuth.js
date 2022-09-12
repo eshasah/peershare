@@ -2,6 +2,8 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 
+let refreshTokens = [];
+
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1500s' });
 }
@@ -33,3 +35,20 @@ const getToken = (req, res) => {
         res.json({ accessToken: accessToken })
     })
 }
+
+const pushToken = (refreshToken) =>{
+    refreshTokens.push(refreshToken);
+}
+
+const removeToken = (req) =>{
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token)
+}
+
+module.exports = {
+    generateAccessToken,
+    generateRefreshToken,
+    authenticateToken,
+    getToken,
+    pushToken,
+    removeToken,
+};

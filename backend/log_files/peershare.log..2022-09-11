@@ -1,0 +1,8 @@
+[2022-09-11T16:39:23.777] [INFO] request - Validate credential: username=Kyle
+[2022-09-11T16:39:23.798] [INFO] request - ::1 - - "POST /login HTTP/1.1" 200 19 "" "PostmanRuntime/7.29.0"
+[2022-09-11T16:45:40.063] [INFO] request - Validate credential: username=Kyle
+[2022-09-11T16:45:40.075] [INFO] request - ::1 - - "POST /login HTTP/1.1" 200 19 "" "PostmanRuntime/7.29.0"
+[2022-09-11T16:46:14.166] [INFO] request - Validate credential: username=Kyle
+[2022-09-11T16:46:14.179] [INFO] request - ::1 - - "POST /login HTTP/1.1" 200 19 "" "PostmanRuntime/7.29.0"
+[2022-09-11T16:48:18.212] [INFO] request - Validate credential: username=Kyle
+[2022-09-11T16:48:18.221] [INFO] request - ::1 - - "POST /login HTTP/1.1" 200 307 "" "PostmanRuntime/7.29.0"

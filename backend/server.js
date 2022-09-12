@@ -8,7 +8,13 @@ const session = require("express-session");
 const logger = require("./logger/logger");
 const app = express();
 
+
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+
+// set & reset login cookies
+app.use(cookieParser());
+
 app.use(
     cors({
         origin: '*',
@@ -16,10 +22,6 @@ app.use(
         credentials: true,
     })
 )
-
-// set & reset login cookies
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
 
 //Adds session for each user login
 app.use(
@@ -34,6 +36,9 @@ app.use(
     })
 );
 
+//Logging log4js
+app.use(logger.express);
+
 //All node server requests handled here.
 app.use("/", router);
 
@@ -42,5 +47,3 @@ app.listen(3000, () => {
     console.log("running server");
 });
 
-//Logging log4js
-app.use(logger.express);
