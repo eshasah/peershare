@@ -4,17 +4,17 @@ const moment = require('moment');
 module.exports = {
 
     getUserById: async (id) => {
-        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM `users` WHERE `id` = ?', [id]);
+        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM `users` WHERE `user_id` = ?', [id]);
         return (userQueryResults.length > 0) ? userQueryResults[0] : {};
     },
 
     getUserByEmail: async (email) => {
-        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM `users` WHERE `email` = ?', [email]);
+        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM `users` WHERE `email_id` = ?', [email]);
         return (userQueryResults.length > 0) ? userQueryResults[0] : {};
     },
 
     emailExists: async (email) => {
-        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * from `users` WHERE `email` = ?', [email]);
+        const [userQueryResults, userQueryFields] = await DB.execute('SELECT * from `users` WHERE `email_id` = ?', [email]);
         return (userQueryResults.length > 0);
     },
 
@@ -27,7 +27,6 @@ module.exports = {
 
         // Add default values
         userData.img       = '';
-        userData.token     = '';
         userData.create_at = moment().format('YYYY-MM-DD');
 
         return await DB.execute(mysql.format('INSERT INTO `users` SET ? ', userData));

@@ -18,19 +18,20 @@ module.exports = function(req, res, next) {
             if (err) {
                 res.status(401).json({ message: 'Unauthorized access.' });
             } else {
-                // Check if token exit in database
-                DB.execute(
-                    mysql.format('SELECT * FROM `users` WHERE `token` = ?', [token]), 
-                    (err, results, fields) => {
-                        if (err) throw err;
+                next();
+                // // Check if token exit in database
+                // DB.execute(
+                //     mysql.format('SELECT * FROM `users` WHERE `token` = ?', [token]), 
+                //     (err, results, fields) => {
+                //         if (err) throw err;
 
-                        if (results.length == 0) {
-                            res.status(401).json({ message: 'Unauthorized access.' });
-                        } else {
-                            next();
-                        }
-                    }
-                );
+                //         if (results.length == 0) {
+                //             res.status(401).json({ message: 'Unauthorized access.' });
+                //         } else {
+                //             next();
+                //         }
+                //     }
+                // );
             }
         })
 

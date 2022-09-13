@@ -15,24 +15,24 @@ module.exports = function(req, res, next) {
             if (err) {
                 res.status(401).json({ message: 'Unauthorized access.' });
             } else {
+                next();
+                // // Check if token exit in database
+                // DB.execute(
+                //     mysql.format('SELECT * FROM `users` WHERE `token` = ?', [token]), 
+                //     (err, results, fields) => {
+                //         if (results.length == 0) {
+                //             res.status(401).json({ message: 'Unauthorized access.' });
+                //         } else {
+                //             const user = results[0];
 
-                // Check if token exit in database
-                DB.execute(
-                    mysql.format('SELECT * FROM `users` WHERE `token` = ?', [token]), 
-                    (err, results, fields) => {
-                        if (results.length == 0) {
-                            res.status(401).json({ message: 'Unauthorized access.' });
-                        } else {
-                            const user = results[0];
-
-                            if (user.type == 'owner') {
-                                next();
-                            } else {
-                                res.status(401).json({ message: 'Unauthorized access.' });
-                            }
-                        }
-                    }
-                );
+                //             if (user.type == 'owner') {
+                //                 next();
+                //             } else {
+                //                 res.status(401).json({ message: 'Unauthorized access.' });
+                //             }
+                //         }
+                //     }
+                // );
             }
         })
 

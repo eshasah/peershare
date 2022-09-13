@@ -7,21 +7,22 @@ const mysql        = require('mysql2/promise');
 
 global.DB = mysql.createPool(
     {
-        host               : process.env.DB_HOST,
-        user               : process.env.DB_USER,
-        database           : process.env.DB_NAME,
-        waitForConnections : process.env.DB_WAIT_FOR_CONNECTIONS,
-        connectionLimit    : process.env.DB_CONNECTION_LIMIT,
-        queueLimit         : process.env.DB_QUEUE_LIMIT
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        database: process.env.DB_NAME,
+        port: process.env.DB_PORT,
+        waitForConnections: process.env.DB_WAIT_FOR_CONNECTIONS,
+        connectionLimit: process.env.DB_CONNECTION_LIMIT,
+        queueLimit: process.env.DB_QUEUE_LIMIT
     }
 );
 
 // Set up express framework
-const express      = require('express');
-const bodyParser   = require('body-parser');
-const helmet       = require('helmet');
+const express = require('express');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
 const cookieparser = require('cookie-parser');
-const cors         = require('cors');
+const cors = require('cors');
 
 const app = express();
 app.use(helmet());
@@ -34,8 +35,8 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.listen(process.env.PORT);
 
 // Get router
-const usersRouter = require('./router/userRouter');
-const carsRouter = require('./router/carRouter')
+const userRouter = require('./router/userRouter');
+const carRouter = require('./router/carRouter')
 
-app.use('/users', usersRouter);
-app.use('/cars', carsRouter);
+app.use('/user', userRouter);
+app.use('/car', carRouter);
