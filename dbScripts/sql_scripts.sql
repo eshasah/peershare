@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS peershare;
 USE peershare;
 
 CREATE TABLE IF NOT EXISTS users (
-  user_id int NOT NULL,
+  user_id int auto_increment NOT NULL,
   user_type varchar(20) NOT NULL,
   email_id varchar(45) DEFAULT NULL,
   phone_number int DEFAULT NULL,
@@ -16,12 +16,15 @@ CREATE TABLE IF NOT EXISTS users (
   eth_account varchar(50) DEFAULT NULL,
   img varchar(100) DEFAULT NULL,
   password varchar(100) DEFAULT NULL,
-  create_at date NOT NULL,
+  created_at date NOT NULL,
+  token varchar(255) NULL, 
   PRIMARY KEY (user_id)
 );
 
+alter table users auto_increment = 1000;
+
 CREATE TABLE IF NOT EXISTS cars (
-  car_id int NOT NULL,
+  car_id int auto_increment NOT NULL,
   make varchar(45) DEFAULT NULL,
   model varchar(45) DEFAULT NULL,
   transmission varchar(45) DEFAULT NULL,
@@ -41,3 +44,4 @@ CREATE TABLE IF NOT EXISTS cars (
       ON UPDATE CASCADE ON DELETE RESTRICT
 ) ;
 
+alter table cars auto_increment = 2000;

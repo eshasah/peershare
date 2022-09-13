@@ -30,14 +30,14 @@ var UserController = module.exports = {
         if (errors.length > 0) {
             res.status(400).json({ errors })
         } else {
-
-            const user = await UserDAO.getUserByEmail(data.email);
+            console.log(data.email_id);
+            const user = await UserDAO.getUserByEmail(data.email_id);
 
             // Generate user token
             const token = jwt.sign(
                 {
-                    id : user.id.toString(),
-                    email : user.email,
+                    id : user.user_id.toString(),
+                    email : user.email_id,
                     eth_account : user.eth_account
                 },
                 process.env.JWT_SECRET_KEY,
@@ -50,7 +50,7 @@ var UserController = module.exports = {
             data.token = token;
 
             // Update user database
-            await UserDAO.updateUser(data, user.id);
+            await UserDAO.updateUser(data, user.user_id);
 
             // Set token in cookie
             res.cookie('lg_token', token, { httpOnly: true });
@@ -81,7 +81,7 @@ var UserController = module.exports = {
         // Get token decoded
         const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
 
-        const cars = await CarDAO.getCarsByUserId(T.id);
+        const cars = await CarDAO.getCarsByUserId(T.user_id);
 
         res.status(200).json({ data: cars });
     },
@@ -91,17 +91,17 @@ var UserController = module.exports = {
         // Get token decoded
         const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
 
-        const user = await UserDAO.getUserById(T.id);
+        const user = await UserDAO.getUserById(T.user_id);
 
         if (Object.keys(user).length > 0) {
             res.status(200).json({
                 data: {
-                    id          : user.id,
-                    first_name  : user.first_name,
-                    last_name   : user.last_name,
-                    email       : user.email,
+                    user_id          : user.user_id,
+                    f_name  : user.f_name,
+                    l_name   : user.l_name,
+                    email_id       : user.email_id,
                     eth_account : user.eth_account,
-                    type        : user.type
+                    user_type: user.user_type
                 }
             });
         } else {
