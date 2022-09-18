@@ -1,49 +1,43 @@
-require('dotenv').config()
+// Set up environment
+const dotenv       = require('dotenv');
+dotenv.config();
 
-const express = require('express')
-const cors = require("cors");
-const router = require("./router/mainRouter");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const logger = require("./logger/logger");
-const app = express();
+// Connect Database
+const mysql        = require('mysql2/promise');
 
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
-
-// set & reset login cookies
-app.use(cookieParser());
-
-app.use(
-    cors({
-        origin: '*',
-        methods: ["GET", "POST", "PUT"],
-        credentials: true,
-    })
-)
-
-//Adds session for each user login
-app.use(
-    session({
-        key: "userId",
-        secret: "subscribe",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-        maxAge: 60 * 60 * 1000,
-        },
-    })
+global.DB = mysql.createPool(
+    {
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+        port: process.env.DB_PORT,
+        connectionLimit: process.env.DB_CONNECTION_LIMIT,
+        queueLimit: process.env.DB_QUEUE_LIMIT,
+        waitForConnections: process.env.DB_WAIT_FOR_CONNECTIONS
+    }
 );
 
-//Logging log4js
-app.use(logger.express);
+// Set up express framework
+const express = require('express');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const cookieparser = require('cookie-parser');
+const cors = require('cors');
 
-//All node server requests handled here.
-app.use("/", router);
+const app = express();
+app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookieparser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
+// Listen
+app.listen(process.env.PORT);
 
-app.listen(3000, () => {
-    console.log("running server");
-});
+// Get router
+const userRouter = require('./router/userRouter');
+const carRouter = require('./router/carRouter')
 
+app.use('/user', userRouter);
+app.use('/car', carRouter);
