@@ -7,13 +7,13 @@ module.exports = {
     addCar: async (req, res) => {
 
         // Get data from post
-        let formData = req.body;
+        let postData = req.body;
 
         // Get token decoded
         const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
 
         // Get user
-        const user = await UserDAO.getUserById(T.id);
+        const user = await UserDAO.getUserById(T.user_id);
 
         // Add to database
         await CarDAO.addCar(postData);
