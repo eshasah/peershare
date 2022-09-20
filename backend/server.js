@@ -37,7 +37,9 @@ app.listen(process.env.PORT);
 
 // Get router
 const userRouter = require('./router/userRouter');
-const carRouter = require('./router/carRouter')
+const carRouter = require('./router/carRouter');
+const rideRouter = require('./router/rideRouter');
 
 app.use('/user', userRouter);
 app.use('/car', carRouter);
+app.use('/ride', rideRouter);

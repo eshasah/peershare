@@ -11,8 +11,8 @@ module.exports = {
         return await DB.execute(mysql.format('INSERT INTO rides SET ?', rideData));
     },
 
-    updateRide: async (rideData, id) => {
-        return await DB.execute(mysql.format('UPDATE rides SET ? WHERE id = ?', [rideData, id]));
+    cancelRide: async (rideData, id) => {
+        return await DB.execute(mysql.format('UPDATE rides SET ? WHERE ride_id = ?', [rideData, id]));
     },
 
     getRides: async (userId) => {
@@ -21,13 +21,8 @@ module.exports = {
     },
 
     getRideById: async (id) => {
-        const [rideQueryResults, rideQueryFields] = await DB.execute('SELECT * FROM rides WHERE id = ?', [id]);
+        const [rideQueryResults, rideQueryFields] = await DB.execute('SELECT * FROM rides WHERE ride_id = ?', [id]);
         return (rideQueryResults.length > 0) ? rideQueryResults[0] : {}
-    },
-    
-    getReturnedRides: async (userId) => {
-        const [rideQueryResults, rideQueryFields] = await DB.execute('SELECT * FROM rides WHERE user_id = ? AND returned_at IS NOT NULL', [userId]);
-        return (rideQueryResults.length > 0) ? rideQueryResults : [];
     },
 
     getCurrentRides: async (userId) => {
