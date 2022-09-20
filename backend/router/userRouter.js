@@ -1,6 +1,5 @@
 const express = require('express');
 
-// Middleware
 const auth = require('./routerHelper/auth');
 const owner = require('./routerHelper/owner');
 
