@@ -1,13 +1,5 @@
-/**
- * Controller for cars routes
- * 
- * @author Kelvin Yin
- */
-
 const jwt       = require('jsonwebtoken');
 const moment    = require('moment');
-const CarNet    = require('../blockchain/js/CarNet');
-const crypto    = require('crypto');
 
 const UserDAO   = require('../model/UserDAO');
 const CarDAO    = require('../model/CarDAO');
