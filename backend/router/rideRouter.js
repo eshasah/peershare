@@ -1,7 +1,6 @@
 const express = require('express');
 
-const auth = require('./routerHelper/auth');
-const owner = require('./routerHelper/owner');
+const borrower = require('./routerHelper/borrower');
 
 // Get express router
 const router = express.Router();
