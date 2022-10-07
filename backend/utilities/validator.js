@@ -1,6 +1,7 @@
 const passwordHash = require('password-hash');
 const UserDAO      = require('../model/UserDAO');
 
+
 module.exports = {
     validate: async (formData, rules) => {
 
@@ -107,16 +108,25 @@ module.exports = {
             }
         }
 
-        // // Validate ethereum private key
-        // if (formData.hasOwnProperty('ethereum_private_key')) {
-        //     data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
+        // Validate ethereum private key
+        if (formData.hasOwnProperty('ethereum_private_key')) {
+            data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
 
-        //     if (data.eth_private_key.length != 66) {
-        //         errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
-        //     }
-        // }
+            if (data.eth_private_key.length != 66) {
+                errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
+            }
+        }
 
         // TODO: Verify ethereum account
+        if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
+            
+            PeerContract.init();
+            
+            if (PeerContract.verifyAccount(data.eth_account, data.eth_private_key) === false) {
+                errors.push({ message: 'Could not connect to Ethereum account.', field: 'ethereum_address' });
+            }
+        }
+
 
 
         return { errors, data };
