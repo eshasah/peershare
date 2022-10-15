@@ -1,7 +1,7 @@
 const jwt       = require('jsonwebtoken');
 const UserDAO   = require('../model/UserDAO');
 const CarDAO    = require('../model/CarDAO');
-const Validator = require('../utilities/Validator');
+const Validator = require('../utilities/helper');
 
 var UserController = module.exports = {
 

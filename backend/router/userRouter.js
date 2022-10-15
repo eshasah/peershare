@@ -1,7 +1,6 @@
 const express = require('express');
 
-const auth = require('./routerHelper/auth');
-const owner = require('./routerHelper/owner');
+const auth = require('../utilities/helper');
 
 // Get express router
 const router = express.Router();
@@ -16,12 +15,12 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 
 // Check if logged in
-router.get('/login/check', auth, userController.isLoggedin);
+router.get('/login/check', auth.authenticate, userController.isLoggedin);
 
 // Get owner cars
-router.get('/cars', owner, userController.getCars);
+router.get('/cars', auth.authenticate, userController.getCars);
 
 // Get user information
-router.get('/', auth, userController.getUser);
+router.get('/', auth.authenticate, userController.getUser);
 
 module.exports = router;

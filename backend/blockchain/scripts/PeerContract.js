@@ -39,5 +39,28 @@ module.exports = {
             return false;
         }
 
-    }
+    },
+
+    addUser: async function(userHash, ethAccount, privateKey) {
+        let instance = await this.contracts.Peershare.deployed();
+
+        // using SHA3 to create a hash of Userdata like email id and ethereum account numer
+        const hash = '0x' + ethereumjsAbi.soliditySHA3(
+            ['bytes32', 'address'],
+            [userHash, ethAccount]
+        ).toString('hex');
+
+        // web3.eth.accounts.sign is used to sign the hashed data with private key
+        const signedHash = web3.eth.accounts.sign(hash, privateKey);
+
+        // Get the signature
+        const signature = signedHash.signature;
+
+        return await instance.addUser(
+            web3.utils.fromAscii(userHash),
+            signature, 
+            { from: ethAccount, gas: 3000000 }
+        );
+
+    },
 }

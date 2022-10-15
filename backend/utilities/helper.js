@@ -1,10 +1,9 @@
 const passwordHash = require('password-hash');
 const UserDAO      = require('../model/UserDAO');
+const jwt = require('jsonwebtoken');
+const mysql = require('mysql2');
 
-
-module.exports = {
-    validate: async (formData, rules) => {
-
+async function validate (formData, rules) {
         // Parse json
         formObj = JSON.parse(JSON.stringify(formData));
 
@@ -127,10 +126,58 @@ module.exports = {
             }
         }
 
+        //verify if user is not already registered with the ethereum account
+        if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
+            
+            const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
 
+            PeerContract.init();
+            
+            if (PeerContract.addUser(userHash, data.eth_account, data.eth_private_key) === false) {
+                errors.push({ message: 'User already registered', field: 'ethereum_address' });
+            }
+        }
 
         return { errors, data };
+}
+
+function authenticate (req, res, next) {
+    // Get token from cookie
+    const token = req.body.lg_token
+    || req.query.lg_token
+    || req.headers['x-access-token']
+    || req.cookies.lg_token;
+
+    if (!token) {
+        res.status(401).json({ message: 'Token is not provided.' });
+    } else {
+
+        // Verify token
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+            if (err) {
+                res.status(401).json({ message: 'Unauthorized access.' });
+            } else {
+                //next();
+                // Check if token exit in database
+                DB.execute(
+                    mysql.format('SELECT * FROM users WHERE token = ?', [token]), 
+                    (err, results, fields) => {
+                        if (err) throw err;
+
+                        if (results.length == 0) {
+                            res.status(401).json({ message: 'Unauthorized access.' });
+                        } else {
+                            next();
+                        }
+                    }
+                );
+            }
+        })
 
     }
+}
 
+module.exports = {
+    validate,
+    authenticate
 }
