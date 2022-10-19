@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS cars (
   last_service datetime DEFAULT NULL,
   available_from datetime DEFAULT NULL,
   available_to datetime DEFAULT NULL,
-  create_at date NOT NULL,
+  created_at date NOT NULL,
   PRIMARY KEY (car_id),
   FOREIGN KEY (user_id)
       REFERENCES users(user_id)
@@ -54,7 +54,7 @@ start_time datetime DEFAULT NULL,
 end_time datetime DEFAULT NULL,
 car_details varchar(45) DEFAULT NULL,
 ride_status varchar(45) DEFAULT NULL,
-create_at date NOT NULL,
+created_at date NOT NULL,
 PRIMARY KEY (ride_id),
 FOREIGN KEY (user_id)
       REFERENCES users(user_id)

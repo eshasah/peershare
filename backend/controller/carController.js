@@ -1,24 +1,26 @@
-const jwt       = require('jsonwebtoken');
-const UserDAO   = require('../model/UserDAO');
-const CarDAO    = require('../model/CarDAO');
-
+const jwt = require('jsonwebtoken');
+const UserDAO = require('../model/UserDAO');
+const CarDAO = require('../model/CarDAO');
+const PeerContract = require('../blockchain/scripts/PeerContract');
 module.exports = {
 
     addCar: async (req, res) => {
-
         // Get data from post
         let postData = req.body;
-
-        // Get token decoded
+        // // Get token decoded
         const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
-
-        // Get user
-        const user = await UserDAO.getUserById(T.user_id);
-
+        // // Get user
+        const user = await UserDAO.getUserById(T.id);
         // Add to database
-        await CarDAO.addCar(postData);
-
-        res.status(200).json({ message: "Successfully added a car"})
+        PeerContract.init();
+        PeerContract.addCar(postData.user_id, user.eth_account).then(
+            async transactionResult => {
+                await CarDAO.addCar(postData);
+                res.status(200).json({ data: transactionResult })
+            }
+        ).catch(err => {
+            console.log(err);
+        });
     },
 
     getCarsList: async (req, res) => {
