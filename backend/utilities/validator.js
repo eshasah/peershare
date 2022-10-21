@@ -1,6 +1,6 @@
 const passwordHash = require('password-hash');
 const UserDAO      = require('../model/UserDAO');
-
+const PeerContract = require('../blockchain/scripts/PeerContract');
 
 module.exports = {
     validate: async (formData, rules) => {
@@ -21,7 +21,6 @@ module.exports = {
             if (/^[a-zA-Z]+$/.test(formObj.first_name) === false) {
                 errors.push({ message: 'Invalid First Name.', field: 'first_name' });
             }
-
         }
 
         // Validate last name

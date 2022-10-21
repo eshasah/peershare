@@ -8,7 +8,7 @@ module.exports = {
         // Add created date
         carData.created_at = moment().format("YYYY-MM-DD");
 
-        return await DB.execute(mysql.format('INSERT INTO cars SET ?', carData));
+        return await DB.execute(mysql.format('INSERT INTO `cars` SET ?', carData));
 
     },
 

@@ -39,5 +39,13 @@ module.exports = {
             return false;
         }
 
+    },
+    addCar: async function (user_id,eth_account) {
+
+        // Deploy contract
+        let instance = await this.contracts.Peershare.deployed();
+
+        return await instance.addCar(user_id,{ from: eth_account, gas: 3000000 });
+
     }
 }

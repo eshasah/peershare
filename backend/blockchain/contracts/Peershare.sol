@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.11;
+// pragma solidity ^0.8.11;
+pragma solidity >=0.4.22 <0.9.0;
 
 // smart contract to add new user, new cars and any ride on the blockchain
 contract Peershare {
     // state variables
+    int256[] public ownerSignature;
     mapping(bytes32 => bytes) userSignature;
     uint256 userCount = 0;
-
-    constructor() {
-        //if we need any state variables to be initialized
-    }
 
     function getUsersInSystem() public view returns (uint256) {
         return uint256(userCount);
@@ -33,5 +31,8 @@ contract Peershare {
         return true;
     }
 
-    // TODO: add new car to blockchain
+    function addCar(int256 user_id) public returns (bool) {
+        ownerSignature.push(user_id);
+        return true;
+    }
 }
