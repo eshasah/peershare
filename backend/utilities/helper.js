@@ -2,14 +2,16 @@ const passwordHash = require('password-hash');
 const UserDAO      = require('../model/UserDAO');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
+const PeerContract = require('../blockchain/scripts/PeerContract');
+const crypto    = require('crypto');
 
 async function validate (formData, rules) {
         // Parse json
         formObj = JSON.parse(JSON.stringify(formData));
 
         // To store errors.
-        errors = [];
-
+        let errors = [];
+        console.log(errors);
         // To store data
         data = {};
 
@@ -67,14 +69,14 @@ async function validate (formData, rules) {
                 if (rules.password == 'verify') {
                     
                     // Verify user password
-                    //if (await UserDAO.emailExists(formData.email)) {
+                    if (await UserDAO.emailExists(formData.email)) {
                         const user = await UserDAO.getUserByEmail(formObj.email);
                         data = user;
                         if (passwordHash.verify(formObj.password, user.password) === false) {
                             errors.push({ message: 'Passwords is incorrect.', field: 'password' });
                         }
 
-                    //}
+                    }
 
                 }
             } else {
@@ -99,6 +101,7 @@ async function validate (formData, rules) {
         }
 
         // Validate ethereum account
+    if(rules.hasOwnProperty('register')){
         if (formObj.hasOwnProperty('ethereum_address')) {
             data.eth_account = (formObj.ethereum_address.substring(0, 2) != '0x') ? '0x' + formObj.ethereum_address : formObj.ethereum_address;
 
@@ -116,9 +119,8 @@ async function validate (formData, rules) {
             }
         }
 
-        // TODO: Verify ethereum account
+        // Verify ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
-            
             PeerContract.init();
             
             if (PeerContract.verifyAccount(data.eth_account, data.eth_private_key) === false) {
@@ -129,17 +131,27 @@ async function validate (formData, rules) {
         //verify if user is not already registered with the ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
             
-            const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
+            const userHash = crypto.createHash('sha256').update(data.eth_account,data.email).digest('hex');
 
             PeerContract.init();
             
-            if (PeerContract.addUser(userHash, data.eth_account, data.eth_private_key) === false) {
-                errors.push({ message: 'User already registered', field: 'ethereum_address' });
+            if (await PeerContract.getUser(userHash, data.eth_account) != "0x0000000000000000000000000000000000000000" ) {
+                console.log('user found');
+                errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
             }
+            console.log('user not found');
         }
+    }
+
+        console.log("PeerContract -> done");
+        console.log("pass=" + data.password);
+        console.log("email=" + data.email_id);
+        console.log("eth_account=" + data.eth_account);
+        console.log("eth_private_key=" + data.eth_private_key);
 
         return { errors, data };
 }
+
 
 function authenticate (req, res, next) {
     // Get token from cookie

@@ -1,6 +1,7 @@
 const Web3 = require('web3');
 const fs = require('fs');
 const TruffleContract = require('@truffle/contract');
+const ethereumjsAbi = require('ethereumjs-abi');
 
 module.exports = {
     web3Provider : null,
@@ -30,7 +31,7 @@ module.exports = {
     },
 
     verifyAccount: function(ethAccount, privateKey) {
-
+        console.log("PeerContract -> verify account and private key");
         const account = web3.eth.accounts.privateKeyToAccount(privateKey);
 
         if (account.address == ethAccount) {
@@ -42,25 +43,47 @@ module.exports = {
     },
 
     addUser: async function(userHash, ethAccount, privateKey) {
+        console.log("PeerContract -> Calling smart contract addUser to insert new block");
         let instance = await this.contracts.Peershare.deployed();
 
-        // using SHA3 to create a hash of Userdata like email id and ethereum account numer
-        const hash = '0x' + ethereumjsAbi.soliditySHA3(
-            ['bytes32', 'address'],
-            [userHash, ethAccount]
-        ).toString('hex');
-
         // web3.eth.accounts.sign is used to sign the hashed data with private key
-        const signedHash = web3.eth.accounts.sign(hash, privateKey);
+        const signedHash = web3.eth.accounts.sign(userHash, privateKey);
 
         // Get the signature
         const signature = signedHash.signature;
 
         return await instance.addUser(
-            web3.utils.fromAscii(userHash),
-            signature, 
+            ethAccount,
             { from: ethAccount, gas: 3000000 }
         );
 
     },
+
+    getUser: async function(userHash, ethAccount) {
+        console.log("PeerContract -> Calling smart contract getUser to check if already registered");
+        let instance = await this.contracts.Peershare.deployed();
+
+        // console.log(instance);
+
+        let allUsers = await instance.getAllUsers( 
+            { from: ethAccount, gas: 3000000 }
+        );  
+        
+        console.log(allUsers);
+
+        var i = await instance.getUser(
+            ethAccount, 
+            { from: ethAccount, gas: 3000000 }
+        );
+
+        console.log(i)
+
+        return i;
+
+        // return await instance.getUser(
+        //     ethAccount, 
+        //     { from: ethAccount, gas: 3000000 }
+        // );
+
+    },  
 }

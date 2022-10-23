@@ -2,21 +2,34 @@ const jwt       = require('jsonwebtoken');
 const UserDAO   = require('../model/UserDAO');
 const CarDAO    = require('../model/CarDAO');
 const Validator = require('../utilities/helper');
+const crypto    = require('crypto');
+const PeerContract = require('../blockchain/scripts/PeerContract');
 
 var UserController = module.exports = {
 
     register: async (req, res) => {
 
-        // Validate form data inputs
-        const { errors, data } = await Validator.validate(req.body, { email: 'unique' });
+        // Validate form data user input
+        const { errors, data } = await Validator.validate(req.body, { email: 'unique' , register: 'true'});
         
         if (errors.length > 0) {
             res.status(400).json({ errors });
         } else {
-            await UserDAO.addUser(data);
+            const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
+            // Add to database
+            PeerContract.init();
+            PeerContract.addUser(userHash, data.eth_account, data.eth_private_key).then(
+                async transactionResult => {
+                    await UserDAO.addUser(data);
+                    res.status(200).json({ data: transactionResult })
+                    // Login
+                    UserController.login(req, res);
+                }
+            ).catch(err => {
+                console.log(err);
+            });
 
-            // Login
-            UserController.login(req, res);
+            
         }
         
     },
@@ -50,7 +63,7 @@ var UserController = module.exports = {
             data.token = token;
 
             // Update user database
-            await UserDAO.updateUser(data, user.user_id);
+            //await UserDAO.updateUser(data, user.user_id);
 
             // Set token in cookie
             res.cookie('lg_token', token, { httpOnly: true });
