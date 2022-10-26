@@ -16,7 +16,7 @@ router.post('/add', owner, carController.addCar);
 router.get('/', carController.getCarsList);
 
 // Get individual car
-router.get('/:id', carController.getCar)
+router.get('/get', carController.getCar)
 
 
 module.exports = router;

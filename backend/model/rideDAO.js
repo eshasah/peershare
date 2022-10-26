@@ -5,13 +5,14 @@ module.exports = {
 
     addRide: async (rideData) => {
         // Add created date
-        rideData.created_at  = moment().format("YYYY-MM-DD");
+        rideData.created_at  = moment().format("YYYY-MM-DD HH:mm:ss");
         rideData.returned_at = null;
 
         return await DB.execute(mysql.format('INSERT INTO rides SET ?', rideData));
     },
 
     cancelRide: async (rideData, id) => {
+        rideData.returned_at = moment().format("YYYY-MM-DD HH:mm:ss");
         return await DB.execute(mysql.format('UPDATE rides SET ? WHERE ride_id = ?', [rideData, id]));
     },
 

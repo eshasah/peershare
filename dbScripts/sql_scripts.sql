@@ -44,19 +44,19 @@ CREATE TABLE IF NOT EXISTS cars (
       ON UPDATE CASCADE ON DELETE RESTRICT
 ) ;
 CREATE TABLE IF NOT EXISTS rides (
-ride_id int auto_increment NOT NULL,
-user_id int NOT NULL,
-source varchar(45) DEFAULT NULL,
-destination varchar(45) DEFAULT NULL,
-owner varchar(45) DEFAULT NULL,
-rider varchar(45) DEFAULT NULL,
-start_time datetime DEFAULT NULL,
-end_time datetime DEFAULT NULL,
-car_details varchar(45) DEFAULT NULL,
-ride_status varchar(45) DEFAULT NULL,
-created_at date NOT NULL,
-PRIMARY KEY (ride_id),
-FOREIGN KEY (user_id)
+  ride_id int auto_increment NOT NULL,
+  user_id int NOT NULL,
+  car_id int NOT NULL,
+  source varchar(45) DEFAULT NULL,
+  destination varchar(45) DEFAULT NULL,
+  owner varchar(45) DEFAULT NULL,
+  rider varchar(45) DEFAULT NULL,
+  car_details varchar(45) DEFAULT NULL,
+  ride_status varchar(45) DEFAULT NULL,
+  created_at datetime NOT NULL,
+  returned_at datetime DEFAULT NULL,
+  PRIMARY KEY (ride_id),
+  FOREIGN KEY (user_id)
       REFERENCES users(user_id)
       ON UPDATE CASCADE ON DELETE RESTRICT
 ) ;

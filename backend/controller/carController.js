@@ -35,7 +35,7 @@ module.exports = {
     getCar: async (req, res) => {
 
         // Get car id
-        const carId = req.params.id;
+        const carId = req.body.car_id;
 
         const car = await CarDAO.getCarById(carId);
 

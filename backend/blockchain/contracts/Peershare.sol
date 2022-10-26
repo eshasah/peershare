@@ -6,6 +6,7 @@ pragma solidity >=0.4.22 <0.9.0;
 contract Peershare {
     // state variables
     int256[] public ownerSignature;
+    mapping(int256 => int256) public borrowerSignature;
     mapping(bytes32 => bytes) userSignature;
     uint256 userCount = 0;
 
@@ -35,4 +36,10 @@ contract Peershare {
         ownerSignature.push(user_id);
         return true;
     }
+    function rentCar(int256 user_id,int256 car_id) public returns (bool) {
+        borrowerSignature[user_id]=car_id;
+        return true;
+    }
+
+    
 }
