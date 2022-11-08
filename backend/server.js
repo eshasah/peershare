@@ -33,13 +33,17 @@ app.use(cookieparser());
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 // Listen
-app.listen(process.env.PORT);
+app.listen(process.env.PORT,() => console.log(`PeerShare App listening on port ${process.env.PORT}!`));
+
+
 
 // Get router
 const userRouter = require('./router/userRouter');
 const carRouter = require('./router/carRouter');
 const rideRouter = require('./router/rideRouter');
+const txnRouter = require('./router/txnRouter');
 
 app.use('/user', userRouter);
 app.use('/car', carRouter);
 app.use('/ride', rideRouter);
+app.use('/txn',txnRouter);
