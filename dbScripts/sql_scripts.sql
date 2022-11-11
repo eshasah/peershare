@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
   country varchar(10) DEFAULT NULL,
   zip_code varchar(45) DEFAULT NULL,
   eth_account varchar(50) DEFAULT NULL,
-  img varchar(100) DEFAULT NULL,
+  eth_private_key varchar(100) DEFAULT NULL,
   password varchar(100) DEFAULT NULL,
   created_at date NOT NULL,
   token varchar(255) NULL, 

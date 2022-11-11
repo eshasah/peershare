@@ -1,6 +1,6 @@
 const express = require('express');
 
-const borrower = require('./routerHelper/borrower');
+const auth = require('../utilities/helper');
 
 // Get express router
 const router = express.Router();
@@ -9,10 +9,10 @@ const router = express.Router();
 const rideController = require('../controller/rideController');
 
 // Book Ride
-router.post('/book', borrower, rideController.bookRide);
+router.post('/book', auth.authenticate, rideController.bookRide);
 
 // Complete a ride
-router.post('/complete', borrower, rideController.completeRide);
+router.post('/complete', auth.authenticate, rideController.completeRide);
 
 // Get rides list
 router.get('/', rideController.getRidesList);

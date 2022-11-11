@@ -24,7 +24,9 @@ module.exports = {
     },
 
     addUser: async (userData) => {
-        return await DB.execute(mysql.format('INSERT INTO users(f_name, l_name, email_id, user_type, created_at, password) VALUES (?,?,?,?,?,?) ', [userData.f_name, userData.l_name, userData.email_id, userData.user_type, moment().format('YYYY-MM-DD'), userData.password]));
+        return await DB.execute(
+            mysql.format('INSERT INTO users(f_name, l_name, email_id, user_type, created_at, password, eth_account, eth_private_key) VALUES (?,?,?,?,?,?,?,?) ', 
+            [userData.f_name, userData.l_name, userData.email_id, userData.user_type, moment().format('YYYY-MM-DD'), userData.password, userData.eth_account, userData.eth_private_key]));
     },
 
     updateUser: async (userData, id) => {

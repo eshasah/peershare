@@ -8,27 +8,23 @@ contract Peershare {
     int256[] public ownerSignature;
     mapping(int256 => int256) public borrowerSignature;
     mapping(bytes32 => bytes) userSignature;
+    mapping(uint256 => address) activeUsers;
     uint256 userCount = 0;
 
-    function getUsersInSystem() public view returns (uint256) {
-        return uint256(userCount);
+    function getUser(address ethereumAddress) public view returns (address) {
+        // Verify if the user is unique in blockchain
+        for (uint256 i = 0; i < userCount; i++) {
+            if (activeUsers[i] == ethereumAddress) {
+                return activeUsers[i];
+            }
+        }
+        return address(0x0);
     }
 
-    function addUser(bytes32 userHash, bytes memory signature)
-        public
-        returns (bool)
-    {
-        // Verify if the user is unique in blockchain
-        if (bytes(userSignature[userHash]).length > 0) {
-            //console.log(userSignature[userHash]);
-            //user already exists
-            return false;
-        }
-
-        // Add user signature
-        userSignature[userHash] = signature;
+    function addUser(address ethereumAddress) public returns (bool) {
+        // Add user address
         userCount = userCount + 1;
-
+        activeUsers[userCount] = ethereumAddress;
         return true;
     }
 
@@ -36,10 +32,9 @@ contract Peershare {
         ownerSignature.push(user_id);
         return true;
     }
-    function rentCar(int256 user_id,int256 car_id) public returns (bool) {
-        borrowerSignature[user_id]=car_id;
+
+    function rentCar(int256 user_id, int256 car_id) public returns (bool) {
+        borrowerSignature[user_id] = car_id;
         return true;
     }
-
-    
 }

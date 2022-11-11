@@ -30,7 +30,7 @@ module.exports = {
     },
 
     verifyAccount: function(ethAccount, privateKey) {
-
+        console.log("PeerContract -> verify account and private key");
         const account = web3.eth.accounts.privateKeyToAccount(privateKey);
 
         if (account.address == ethAccount) {
@@ -38,8 +38,37 @@ module.exports = {
         } else {
             return false;
         }
+    },
+
+    addUser: async function(userHash, ethAccount, privateKey) {
+        console.log("PeerContract -> Calling smart contract addUser to insert new block");
+        let instance = await this.contracts.Peershare.deployed();
+
+        // web3.eth.accounts.sign is used to sign the hashed data with private key
+        const signedHash = web3.eth.accounts.sign(userHash, privateKey);
+
+        // Get the signature
+        const signature = signedHash.signature;
+
+        return await instance.addUser(
+            ethAccount,
+            { from: ethAccount, gas: 3000000 }
+        );
 
     },
+
+    getUser: async function(userHash, ethAccount) {
+        console.log("PeerContract -> Calling smart contract getUser to check if already registered");
+        let instance = await this.contracts.Peershare.deployed();
+
+        var i = await instance.getUser(
+            ethAccount, 
+            { from: ethAccount, gas: 3000000 }
+        );
+
+        return i;
+    }, 
+
     addCar: async function (user_id,eth_account) {
 
         // Deploy contract
@@ -48,6 +77,7 @@ module.exports = {
         return await instance.addCar(user_id,{ from: eth_account, gas: 3000000 });
 
     },
+    
     rentCar: async function (user_id,car_id,eth_account) {
 
         // Deploy contract
