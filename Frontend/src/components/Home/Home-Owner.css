@@ -1,0 +1,63 @@
+#div1 {
+    border: 0px solid;
+    width: 32%;
+    height: 182px;
+    margin-left: 38%;
+    border-radius: 15px;
+    background: #37474f;
+}
+
+#lblCarInfo {
+    
+    margin-top: 8px;
+    margin-left: 47px;
+    font-weight: 100;
+    font-size: 17px;
+
+}
+
+#tblCarInfo {
+    border-collapse: collapse ;
+    border-spacing: 65px 0;
+}
+#tblRidesTaken {
+    border-collapse: separate;
+    border-spacing: 75px 0;
+  }
+  
+  td {
+    padding: 10px 0;
+  }
+
+#tblCarInfoAdmin td {
+    padding-right: 140px;
+}
+
+  #tblCarInfoAdmin tr:last-child { 
+    border-bottom: none; 
+}
+
+#tblUserInfoAdmin td {
+  padding-right: 140px;
+}
+
+#tblUserInfoAdmin tr:last-child { 
+  border-bottom: none; 
+}
+
+
+#tblRidesTakenAdmin td {
+    padding-right: 200px;
+}
+
+  #tblRidesTakenAdmin tr:last-child { 
+    border-bottom: none; 
+}
+
+#tblCarInfo td {
+  padding-right: 140px;
+}
+
+#tblCarInfo tr:last-child { 
+  border-bottom: none; 
+}

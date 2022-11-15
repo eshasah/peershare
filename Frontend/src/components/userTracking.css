@@ -1,0 +1,327 @@
+.col {
+    color: black;
+}
+
+.header{
+    background:#f5f7fb!important;
+    border-bottom:none!important
+  }
+  .text-muted {
+    color: #9aa0ac !important;
+  }
+  .progress-bar-animated {
+    -webkit-animation: progress-bar-stripes 1s linear infinite;
+    animation: progress-bar-stripes 1s linear infinite;
+  }
+  .progress {
+    position: relative;
+  }
+  .progress-bar-indeterminate:after,
+  .progress-bar-indeterminate:before {
+    content: "";
+    position: absolute;
+    background-color: inherit;
+    left: 0;
+    will-change: left, right;
+    top: 0;
+    bottom: 0;
+  }
+  .progress-bar-indeterminate:before {
+    -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395)
+      infinite;
+    animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+  }
+  .Accordion-body{
+      width: 1073px !important;
+  }
+  
+  .display-4 {
+    /* font-size: 3rem!important; */
+    font-weight: 300!important;
+    line-height: 1.1!important;
+    text-align:Center!important;
+  }.mb-4,
+  .my-4 {
+    margin-bottom: 1rem !important;
+  }
+  .progress-bar-indeterminate:after {
+    -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+      infinite;
+    animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+      infinite;
+    -webkit-animation-delay: 1.15s;
+    animation-delay: 1.15s;
+  }
+  .progress-xs,
+  .progress-xs .progress-bar {
+    height: 0.25rem;
+  }
+  
+  .progress-sm,
+  .progress-sm .progress-bar {
+    height: 0.5rem;
+  }
+  
+  .progress-bar {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    background-color: #467fcf;
+    transition: width 0.6s ease;
+  }
+  .page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol"!important;
+  --font-family-monospace: Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace!important;
+     font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "Helvetica Neue", Arial, sans-serif!important;
+    /* font-size: 0.9375rem!important; */
+    font-weight: 400!important;
+  }
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  .pb-4, .py-4 {
+    padding-bottom: 1rem !important;
+  }
+  .pt-4, .py-4 {
+    padding-top: 1rem !important;
+  }
+  .header {
+    background: #f5f7fb!important;
+    border-bottom: none!important;
+  }
+  .p-0 {
+    padding: 0 !important;
+  }
+  .d-lg-flex {
+    display: flex !important;
+  }
+  .page-content {
+    margin: 1.5rem 0;
+  }
+  .container {
+    max-width: 1200px;
+  }
+  .container {
+    width: 100%;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .page-header {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0 1.5rem;
+    flex-wrap: wrap;
+  }.page-title {
+    margin: 0;
+    /* font-size: 1.5rem!important; */
+    font-weight: 400!important;
+    line-height: 2.5rem!important;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -0.75rem;
+    margin-left: -0.75rem;
+  }
+  .row-cards > .col, .row-cards > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+  }
+  .col-11 {
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+  }.card {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    position: relative;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 40, 100, 0.12);
+    border-radius: 3px;
+    
+  }
+  .card-header:first-child {
+    border-radius: calc(3px - 1px) calc(3px - 1px) 0 0;
+  }
+  .card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 1.5rem 1.5rem;
+    position: relative;
+  }
+  
+  .card-body + .card-body {
+    border-top: 1px solid rgba(0, 40, 100, 0.12);
+  }
+  
+  .card-body > :last-child {
+    margin-bottom: 0;
+  }
+  
+  @media print {
+    .card-body {
+      padding: 0;
+    }
+  }
+  
+  .card-body-scrollable {
+    overflow: auto;
+  }
+  .card-header {
+    background: none;
+    padding-left: 1.5rem;
+    /* padding: 0.5rem 1.5rem; */
+    display: flex;
+    min-height: 3.54rem;
+    border-bottom: 1px solid rgba(0, 40, 100, 0.12);
+    /* align-items: center; */
+    /* padding-bottom: 1.5rem; */
+    font-weight: bold;
+  }
+  .card-title:only-child {
+    margin-bottom: 0;
+  }
+  .card-title {
+    /* font-size: 1.125rem; */
+    line-height: 1.2;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+  }
+  .list-group {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+  .card-header + .list-group .list-group-item:first-child {
+    border-top: 0;
+  }
+  .list-group-item:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+  .list-group-item:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 40, 100, 0.12);
+  }
+  .col {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+  .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm, .col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md, .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg, .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+  .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  /* body {
+    margin: 0;
+    font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Arial, sans-serif!important;
+    font-size: 0.9375rem!important;
+    font-weight: 400!important;
+    line-height: 1.5!important;
+    color: #495057!important;
+    text-align: left!important;
+    background-color: #f5f7fb!important;
+  } */
+  .progress {
+    position: relative;
+  }
+  
+  .progress-xs,
+  .progress-xs .progress-bar {
+    height: 0.25rem;
+  }
+  .h5,
+  .h6 {
+    margin-bottom: 0.66em;
+    font-family: inherit;
+    font-weight: 600;
+    line-height: 1.1;
+    color: inherit;
+    text-align:center
+  }
+  .progress-sm,
+  .progress-sm .progress-bar {
+    height: 0.5rem;
+  }
+  
+  .progress-bar-indeterminate:after,
+  .progress-bar-indeterminate:before {
+    content: "";
+    position: absolute;
+    background-color: inherit;
+    left: 0;
+    will-change: left, right;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .progress-bar-indeterminate:before {
+    -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395)
+      infinite;
+    animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+  }
+  
+  .progress-bar-indeterminate:after {
+    -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+      infinite;
+    animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1)
+      infinite;
+    -webkit-animation-delay: 1.15s;
+    animation-delay: 1.15s;
+  }
+  .card-footer {
+    padding: 1rem 1.5rem;
+    
+    border-top: 1px solid rgba(0, 40, 100, 0.12);
+  }
+  .card-footer:last-child {
+    border-radius: 0 0 calc(3px - 1px) calc(3px - 1px);
+  }
+  
+  
+  
+  

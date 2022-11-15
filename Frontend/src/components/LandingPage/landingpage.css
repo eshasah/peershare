@@ -1,0 +1,10 @@
+.text-on-image {
+  position: fixed;
+  right: 20%;
+  left: 25%;
+  bottom: 82%;
+  color: #034672;
+  text-decoration: solid;
+  text-align: center;
+  font-style: italic;
+}

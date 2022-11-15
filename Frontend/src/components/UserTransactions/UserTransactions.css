@@ -1,0 +1,28 @@
+#div1 {
+    border: 0px solid;
+    width: 32%;
+    height: 182px;
+    margin-left: 38%;
+    border-radius: 15px;
+    background: #034672;
+}
+
+
+#tblTransactions {
+    border-collapse: collapse;
+    border-spacing: 90px 0;
+       
+  }
+
+  #tblTransactions tr {
+    border-bottom: 1px solid black;
+}
+
+#tblTransactions td {
+    padding-right: 110px;
+}
+
+  #tblTransactions tr:last-child { 
+    border-bottom: none; 
+}
+  
