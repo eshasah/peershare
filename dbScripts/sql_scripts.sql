@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
   zip_code varchar(45) DEFAULT NULL,
   eth_account varchar(50) DEFAULT NULL,
   eth_private_key varchar(100) DEFAULT NULL,
+  img varchar(100) DEFAULT NULL,
   password varchar(100) DEFAULT NULL,
   created_at date NOT NULL,
   token varchar(255) NULL, 
@@ -25,6 +26,7 @@ alter table users auto_increment = 1000;
 
 CREATE TABLE IF NOT EXISTS cars (
   car_id int auto_increment NOT NULL,
+  hash varchar(100) NOT NULL,
   make varchar(45) DEFAULT NULL,
   model varchar(45) DEFAULT NULL,
   transmission varchar(45) DEFAULT NULL,
@@ -51,6 +53,8 @@ CREATE TABLE IF NOT EXISTS rides (
   destination varchar(45) DEFAULT NULL,
   owner varchar(45) DEFAULT NULL,
   rider varchar(45) DEFAULT NULL,
+  start_time datetime DEFAULT NULL,
+  end_time datetime DEFAULT NULL,
   car_details varchar(45) DEFAULT NULL,
   ride_status varchar(45) DEFAULT NULL,
   created_at datetime NOT NULL,

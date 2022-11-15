@@ -1,7 +1,7 @@
 const express = require('express');
 
 // Middleware
-const auth = require('../utilities/helper');
+const owner = require('./routerHelper/owner');
 
 // Get express router
 const router = express.Router();
@@ -10,13 +10,13 @@ const router = express.Router();
 const carController = require('../controller/carController');
 
 // Add Car
-router.post('/add', auth.authenticate, carController.addCar);
+router.post('/add', owner, carController.addCar);
 
 // Get cars list
 router.get('/', carController.getCarsList);
 
 // Get individual car
-router.get('/:id', carController.getCar)
+router.get('/get', carController.getCar)
 
 
 module.exports = router;

@@ -69,21 +69,40 @@ module.exports = {
         return i;
     }, 
 
-    addCar: async function (user_id,eth_account) {
+    addCar: async function (carHash,ethAccount,privateKey) {
 
         // Deploy contract
         let instance = await this.contracts.Peershare.deployed();
+        console.log(carHash);
+        console.log(ethAccount);
+        return await instance.addCar(carHash,web3.eth.accounts.sign('0x'+ ethereumjsAbi.soliditySHA3(
+            ['bytes32', 'address'],
+            [carHash, ethAccount]
+        ).toString('hex'), privateKey).signature,{ from: ethAccount, gas: 3000000 });
+    },
+    rentCar: async function (carHash,ownerEthAccount,ethAccount,privateKey) {
 
-        return await instance.addCar(user_id,{ from: eth_account, gas: 3000000 });
+        // Deploy contract
+        let instance = await this.contracts.Peershare.deployed();
+        console.log(carHash);
+        console.log(ownerEthAccount);
+        return await instance.rentCar(carHash,ownerEthAccount,web3.eth.accounts.sign('0x' + ethereumjsAbi.soliditySHA3(
+            ['bytes32', 'address'],
+            [carHash, ethAccount]
+        ).toString('hex'), privateKey).signature,{ from: ethAccount, gas: 3000000 });
 
     },
-    
-    rentCar: async function (user_id,car_id,eth_account) {
+    returnCar: async function (carHash,ownerEthAccount,ethAccount) {
 
         // Deploy contract
         let instance = await this.contracts.Peershare.deployed();
 
-        return await instance.rentCar(user_id,car_id,{ from: eth_account, gas: 3000000 });
+        return await instance.returnCar(carHash,
+        ownerEthAccount,
+        { 
+            from: ethAccount,
+            gas: 300000 
+        });
 
     }
 }
