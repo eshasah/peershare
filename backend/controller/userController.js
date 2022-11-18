@@ -46,9 +46,9 @@ var UserController = module.exports = {
             // Generate user token
             const token = jwt.sign(
                 {
-                    id : user.user_id.toString(),
-                    email : user.email_id,
-                    eth_account : user.eth_account
+                    id: user.user_id.toString(),
+                    email: user.email_id,
+                    eth_account: user.eth_account
                 },
                 process.env.JWT_SECRET_KEY,
                 {
@@ -106,11 +106,11 @@ var UserController = module.exports = {
         if (Object.keys(user).length > 0) {
             res.status(200).json({
                 data: {
-                    user_id          : user.user_id,
-                    f_name  : user.f_name,
-                    l_name   : user.l_name,
-                    email_id       : user.email_id,
-                    eth_account : user.eth_account,
+                    user_id: user.user_id,
+                    f_name: user.f_name,
+                    l_name: user.l_name,
+                    email_id: user.email_id,
+                    eth_account: user.eth_account,
                     user_type: user.user_type
                 }
             });

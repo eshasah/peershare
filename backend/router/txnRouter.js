@@ -1,8 +1,4 @@
 const express = require('express');
-
-const auth = require('./routerHelper/auth');
-const owner = require('./routerHelper/owner');
-
 // Get express router
 const router = express.Router();
 

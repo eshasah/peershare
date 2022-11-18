@@ -1,6 +1,4 @@
 const jwt = require('jsonwebtoken');
-const moment = require('moment');
-const crypto    = require('crypto');
 const UserDAO = require('../model/UserDAO');
 const CarDAO = require('../model/CarDAO');
 const RideDAO = require('../model/RideDAO');
