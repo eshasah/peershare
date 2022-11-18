@@ -2,10 +2,11 @@ const Web3 = require('web3');
 const fs = require('fs');
 const TruffleContract = require('@truffle/contract');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-
+const peershareArtifact = require('../build/contracts/Peershare.json');
 //const myAddress = '0xc847e0982395f37650302263f5b825a6df516d29';
 //const myPrivateKey = "0x50701c16dc03d77bed2c1536fac3067d89225e5fab2445c90f232225a13bc1a1";
 //const network = process.env.ETHEREUM_NETWORK;
+let contract = null;
 
 module.exports = {
     web3Provider : null,
@@ -28,10 +29,9 @@ module.exports = {
         // Create web3 object to connect to blockchain
         web3 = new Web3(this.web3Provider);
 
-        // Get artifact from Peershare contract
-        var peershareArtifact = JSON.parse(fs.readFileSync('blockchain/build/contracts/Peershare.json'));
-
         // Add contract
+        //contract = await contract.deploy({data: peershareArtifact.bytecode}).send({from: process.env.SIGNER_ADDRESS});
+
         this.contracts.Peershare = TruffleContract(peershareArtifact);
         this.contracts.Peershare.setProvider(this.web3Provider);
 
@@ -70,7 +70,7 @@ module.exports = {
 
     },
 
-    getUser: async function(userHash, ethAccount) {
+    getUser: async function(ethAccount) {
         //console.log("PeerContract -> Calling smart contract getUser to check if already registered");
         let instance = await this.contracts.Peershare.deployed();
 

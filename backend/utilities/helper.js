@@ -115,13 +115,10 @@ async function validate (formData, rules) {
 
         //verify if user is not already registered with the ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
-            
-            const userHash = crypto.createHash('sha256').update(data.eth_account,data.email).digest('hex');
-
             PeerContract.init();
             
             //check if 0th entry is 0x0
-            if (await PeerContract.getUser(userHash, data.eth_account)[0] != "0x0000000000000000000000000000000000000000" ) {
+            if (await PeerContract.getUser(data.eth_account)[0] != "0x0000000000000000000000000000000000000000" ) {
                 console.log('user found');
                 errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
             }
