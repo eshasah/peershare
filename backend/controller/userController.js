@@ -1,8 +1,8 @@
-const jwt       = require('jsonwebtoken');
-const UserDAO   = require('../model/UserDAO');
-const CarDAO    = require('../model/CarDAO');
+const jwt = require('jsonwebtoken');
+const UserDAO = require('../model/UserDAO');
+const CarDAO = require('../model/CarDAO');
 const Validator = require('../utilities/helper');
-const crypto    = require('crypto');
+const crypto = require('crypto');
 const PeerContract = require('../blockchain/scripts/PeerContract');
 
 var UserController = module.exports = {

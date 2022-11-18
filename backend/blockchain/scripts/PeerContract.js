@@ -1,62 +1,17 @@
 const Web3 = require('web3');
 const fs = require('fs');
 const TruffleContract = require('@truffle/contract');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
-//const { abi } = JSON.parse(fs.readFileSync("../build/contracts/Peershare.json"))
-
-async function main(){
-    const ethNetwork = process.env.ETHEREUM_NETWORK;
-    const web3 = new Web3(
-        new Web3.providers.HttpProvider(
-            `https://${network}.infura.io/v3/${process.env.INFURA_API_KEY}`
-        )
-    );
-
-    // Signing account with private ekey
-    const signer = web3.eth.accounts.privateKeyToAccount(
-        process.env.SIGNER_PRIVATE_KEY
-    );
-
-    web3.eth.accounts.wallet.add(signer);
-    const contract = new web3.eth.Contract(
-        abi,
-        // Contract address
-        process.env.DEMO_CONTRACT_2
-    );
-
-    console.log(contract.methods);
-
-    const tx = await contract.methods.transferFrom("0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E","0x4d262315d1A1228CBBD8516B8DB095E226a837Df",1000000);
-
-    console.log("Transaction::",tx);
-
-    const receipt = await tx
-        .send({
-            from: signer.address,
-            gas: 1000000,
-            value:1000000
-        }) 
-        .once("transactionHash", (txhash) => {
-            console.log(`Mining transaction ...`);
-            console.log(`https://${network}.etherscan.io/tx/${txhash}`);
-        });
-
-    
-    // The transaction is now on chain!
-    console.log(`Mined in block ${receipt.blockNumber}`);
-
-    console.log(receipt);
-
-    web3.eth.getBalance("0x4d262315d1A1228CBBD8516B8DB095E226a837Df", (err, balance) => {
-        console.log(web3.utils.fromWei(balance, 'ether'));
-    });
-}
+//const myAddress = '0xc847e0982395f37650302263f5b825a6df516d29';
+//const myPrivateKey = "0x50701c16dc03d77bed2c1536fac3067d89225e5fab2445c90f232225a13bc1a1";
+//const network = process.env.ETHEREUM_NETWORK;
 
 module.exports = {
     web3Provider : null,
     contracts : {},
     ethereumServer: process.env.ETH_SERVER,
-
+    signer: null,
     //initialize peershare contract
     init: function() {
 
@@ -64,10 +19,9 @@ module.exports = {
         if (typeof web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
         } else {
-            this.web3Provider = new Web3(
-                new Web3.providers.HttpProvider(
-                    `https://${network}.infura.io/v3/${process.env.INFURA_API_KEY}`
-                )
+            this.web3Provider = new HDWalletProvider(
+                myPrivateKey,
+                'https://goerli.infura.io/v3/c68b12f2513d4d8797525633ccc1ffbd'
             );
         }
 
@@ -81,6 +35,11 @@ module.exports = {
         this.contracts.Peershare = TruffleContract(peershareArtifact);
         this.contracts.Peershare.setProvider(this.web3Provider);
 
+        // Signing account with private ekey
+        this.signer = web3.eth.accounts.privateKeyToAccount(
+            process.env.SIGNER_PRIVATE_KEY
+        );
+        web3.eth.accounts.wallet.add(signer);
     },
 
     verifyAccount: function(ethAccount, privateKey) {
@@ -162,8 +121,8 @@ module.exports = {
 
     },
 
-    transferMoney: async function(){
-        const tx = await contract.methods.transferFrom("0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E","0x4d262315d1A1228CBBD8516B8DB095E226a837Df",1000000);
+    transferMoney: async function(sender, receiver, amount){
+        const tx = await contract.methods.transferFrom(sender, receiver, amount);
 
         console.log("Transaction::",tx);
 
@@ -175,7 +134,6 @@ module.exports = {
             }) 
             .once("transactionHash", (txhash) => {
                 console.log(`Mining transaction ...`);
-                console.log(`https://${network}.etherscan.io/tx/${txhash}`);
             });
 
         // The transaction is now on chain!
@@ -183,7 +141,7 @@ module.exports = {
 
         console.log(receipt);
 
-        web3.eth.getBalance("0x4d262315d1A1228CBBD8516B8DB095E226a837Df", (err, balance) => {
+        web3.eth.getBalance("sender", (err, balance) => {
             console.log(web3.utils.fromWei(balance, 'ether'));
         });
     }
