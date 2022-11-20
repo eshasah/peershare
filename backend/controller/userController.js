@@ -15,15 +15,16 @@ var UserController = module.exports = {
         if (errors.length > 0) {
             res.status(400).json({ errors });
         } else {
-            const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
+            const userHash = '0x'+crypto.createHash('sha256').update(data.eth_account).digest('hex');
             // Add to database
+            data.hash= userHash;
             PeerContract.init();
             PeerContract.addUser(userHash, data.eth_account, data.eth_private_key).then(
                 async transactionResult => {
                     await UserDAO.addUser(data);
-                    res.status(200).json({ data: transactionResult })
+                    // res.status(200).json({ data: transactionResult })
                     // Login
-                    //UserController.login(req, res);
+                    UserController.login(req, res);
                 }
             ).catch(err => {
                 console.log(err);
@@ -48,7 +49,7 @@ var UserController = module.exports = {
                 {
                     id: user.user_id.toString(),
                     email: user.email_id,
-                    eth_account: user.eth_account
+                    // eth_account: user.eth_account
                 },
                 process.env.JWT_SECRET_KEY,
                 {
@@ -60,7 +61,7 @@ var UserController = module.exports = {
             data.token = token;
 
             // Update user database
-            //await UserDAO.updateUser(data, user.user_id);
+            await UserDAO.updateUser(data, user.user_id);
 
             // Set token in cookie
             res.cookie('lg_token', token, { httpOnly: true });
