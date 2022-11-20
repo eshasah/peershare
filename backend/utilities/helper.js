@@ -117,12 +117,10 @@ async function validate (formData, rules) {
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
             PeerContract.init();
             
-            //check if 0th entry is 0x0
-            if (await PeerContract.getUser(data.eth_account)[0] != "0x0000000000000000000000000000000000000000" ) {
+            if (await PeerContract.getUser(data.eth_account) != '-1' ) {
                 console.log('user found');
                 errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
             }
-            console.log('user not found');
         }
     }
 
@@ -145,7 +143,6 @@ function authenticate (req, res, next) {
             if (err) {
                 res.status(401).json({ message: 'Unauthorized access.' });
             } else {
-                //next();
                 // Check if token exit in database
                 DB.execute(
                     mysql.format('SELECT * FROM users WHERE token = ?', [token]), 

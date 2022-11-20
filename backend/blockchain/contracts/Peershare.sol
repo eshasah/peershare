@@ -18,6 +18,10 @@ contract Peershare {
     mapping(address => uint256) private balances;
     event Transfer(address indexed from, address indexed to, uint256 value);
 
+    function getUserCount() public view returns (uint256) {
+        return userCount;
+    }
+
     function getUser(address ethereumAddress) public view returns (address) {
         address res = address(0x0);
         // Verify if the user is unique in blockchain
@@ -166,20 +170,5 @@ contract Peershare {
 
     function getBalance(address sender) public view returns (uint256) {
         return address(sender).balance;
-    }
-
-    function sendViaCall(address payable _to) public payable {
-        // Call returns a boolean value indicating success or failure.
-        // This is the current recommended method to use.
-        (bool sent, bytes memory data) = _to.call{value: msg.value}("");
-        require(sent, "Failed to send Ether");
-    }
-
-    function transferToOwner() external {
-        require(
-            msg.sender == 0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E,
-            "caller is not owner"
-        );
-        payable(msg.sender).transfer(1000000);
     }
 }
