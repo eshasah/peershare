@@ -15,7 +15,10 @@ router.post('/add', auth.authenticate, carController.addCar);
 router.get('/', carController.getCarsList);
 
 // Get individual car
-router.get('/get', carController.getCar)
+router.get('/get', carController.getCar);
+
+// Get all cars by user id
+router.get('/all', auth.authenticate, carController.getCarsByUser);
 
 
 module.exports = router;

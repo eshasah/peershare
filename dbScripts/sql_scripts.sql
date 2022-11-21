@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS cars (
   user_id int NOT NULL,
   price int DEFAULT NULL,
   address varchar(45) DEFAULT NULL,
+  color varchar(45) NULL,
   status varchar(45) DEFAULT NULL,
   last_service datetime DEFAULT NULL,
   available_from datetime DEFAULT NULL,

@@ -56,12 +56,6 @@ var UserController = module.exports = {
                 }
             );
 
-            // Add token into data
-            data.token = token;
-
-            // Update user database
-            //await UserDAO.updateUser(data, user.user_id);
-
             // Set token in cookie
             res.cookie('lg_token', token, { httpOnly: true });
 
@@ -87,11 +81,15 @@ var UserController = module.exports = {
     },
 
     getCars: async (req, res) => {
-        
-        // Get token decoded
-        const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
+        const token = req.body.lg_token
+        || req.query.lg_token
+        || req.headers['x-access-token']
+        || req.cookies.lg_token;
 
-        const cars = await CarDAO.getCarsByUserId(T.user_id);
+        // Get token decoded
+        const T = jwt.verify(req.headers['x-access-token'], process.env.JWT_SECRET_KEY);
+
+        const cars = await CarDAO.getCarsByUserId(T.id);
 
         res.status(200).json({ data: cars });
     },
@@ -99,9 +97,9 @@ var UserController = module.exports = {
     getUser: async (req, res) => {
 
         // Get token decoded
-        const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
+        const T = jwt.verify(req.headers['x-access-token'], process.env.JWT_SECRET_KEY);
 
-        const user = await UserDAO.getUserById(T.user_id);
+        const user = await UserDAO.getUserById(T.id);
 
         if (Object.keys(user).length > 0) {
             res.status(200).json({

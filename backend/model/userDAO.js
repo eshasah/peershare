@@ -31,11 +31,16 @@ const updateUser = async (userData, id) => {
     return await DB.execute(mysql.format('UPDATE users SET ? WHERE user_id = ?', [userData, id]));
 }
 
+const updateUserToken = async (token, id) => {
+    return await DB.execute(mysql.format('UPDATE users SET token = ? WHERE user_id = ?', [token, id]));
+}
+
 module.exports = {
     getUserById,
     getUserByEmail,
     emailExists,
     ethAccountExists,
     addUser,
-    updateUser
+    updateUser,
+    updateUserToken,
 }

@@ -132,28 +132,23 @@ function authenticate (req, res, next) {
     || req.headers['x-access-token']
     || req.cookies.lg_token;
 
+    let errors =[];
+
     if (!token) {
         res.status(401).json({ message: 'Token is not provided.' });
     } else {
-        next();
         // Verify token
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
             if (err) {
                 res.status(401).json({ message: 'Unauthorized access.' });
             } else {
-                // Check if token exit in database
-                DB.execute(
-                    mysql.format('SELECT * FROM users WHERE token = ?', [token]), 
-                    (err, results, fields) => {
-                        if (err) throw err;
-
-                        if (results.length == 0) {
-                            res.status(401).json({ message: 'Unauthorized access.' });
-                        } else {
-                            next();
-                        }
-                    }
-                );
+                console.log(decoded);
+                // Check if user exit in database
+                if(await UserDAO.emailExists(decoded.email)){
+                    next();
+                } else{
+                    res.status(401).json({ message: 'Unauthorized access.' });
+                }
             }
         })
 
