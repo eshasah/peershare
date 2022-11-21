@@ -96,8 +96,8 @@ async function validate (formData, rules) {
         }
 
         // Validate ethereum private key
-        if (formData.hasOwnProperty('ethereum_private_key')) {
-            data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
+        if (formData.hasOwnProperty('eth_private_key')) {
+            data.eth_private_key = (formData.eth_private_key.substring(0, 2) != '0x') ? '0x' + formData.eth_private_key : formData.eth_private_key;
 
             if (data.eth_private_key.length != 66) {
                 errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
@@ -116,7 +116,6 @@ async function validate (formData, rules) {
         //verify if user is not already registered with the ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
             PeerContract.init();
-            
             if (await PeerContract.getUser(data.eth_account) != '-1' ) {
                 console.log('user found');
                 errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
@@ -138,6 +137,7 @@ function authenticate (req, res, next) {
     if (!token) {
         res.status(401).json({ message: 'Token is not provided.' });
     } else {
+        next();
         // Verify token
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
             if (err) {

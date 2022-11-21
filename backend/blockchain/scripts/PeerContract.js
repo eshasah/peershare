@@ -26,12 +26,19 @@ module.exports = {
     init: function() {
 
         // Check if web3 has already been provided
+        // if (typeof web3 !== 'undefined') {
+        //     this.web3Provider = web3.currentProvider;
+        // } else {
+        //     this.web3Provider = new HDWalletProvider(
+        //         myPrivateKey,
+        //         'https://goerli.infura.io/v3/c68b12f2513d4d8797525633ccc1ffbd'
+        //     );
+        // }
         if (typeof web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
         } else {
             this.web3Provider = provider;
         }
-
         // Create web3 object to connect to blockchain
         web3 = new Web3(this.web3Provider);
 
@@ -43,7 +50,7 @@ module.exports = {
         // this.signer = web3.eth.accounts.privateKeyToAccount(
         //     process.env.SIGNER_PRIVATE_KEY
         // );
-        web3.eth.accounts.wallet.add(signer);
+        // web3.eth.accounts.wallet.add(signer);
     },
 
     verifyAccount: function(ethAccount, privateKey) {
@@ -71,6 +78,7 @@ module.exports = {
         //     ethAccount, signedHash, signature,
         //     { from: ethAccount, gas: 3000000 }
         // );
+
         return true;
     },
 
@@ -86,6 +94,7 @@ module.exports = {
 
         // Deploy contract
         let instance = await this.contracts.Peershare.deployed();
+
         console.log(carHash);
         console.log(ethAccount);
         // return await instance.addCar(carHash,web3.eth.accounts.sign('0x'+ ethereumjsAbi.soliditySHA3(
@@ -98,6 +107,7 @@ module.exports = {
     rentCar: async function (carHash,ownerEthAccount,ethAccount,privateKey) {
         // Deploy contract
         let instance = await this.contracts.Peershare.deployed();
+
         console.log(carHash);
         console.log(ownerEthAccount);
         // return await instance.rentCar(carHash,ownerEthAccount,web3.eth.accounts.sign('0x' + ethereumjsAbi.soliditySHA3(
