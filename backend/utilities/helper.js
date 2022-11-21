@@ -8,10 +8,8 @@ const crypto    = require('crypto');
 async function validate (formData, rules) {
     // Parse json
     formObj = JSON.parse(JSON.stringify(formData));
-
     // To store errors.
     let errors = [];
-    console.log(errors);
     // To store data
     data = {};
 
@@ -96,8 +94,9 @@ async function validate (formData, rules) {
         }
 
         // Validate ethereum private key
-        if (formData.hasOwnProperty('eth_private_key')) {
-            data.eth_private_key = (formData.eth_private_key.substring(0, 2) != '0x') ? '0x' + formData.eth_private_key : formData.eth_private_key;
+        if (formData.hasOwnProperty('ethereum_private_key')) {
+            console.log(formData.ethereum_private_key);
+            data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
 
             if (data.eth_private_key.length != 66) {
                 errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
@@ -107,7 +106,6 @@ async function validate (formData, rules) {
         // Verify ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
             PeerContract.init();
-            
             if (PeerContract.verifyAccount(data.eth_account, data.eth_private_key) === false) {
                 errors.push({ message: 'Could not connect to Ethereum account.', field: 'ethereum_address' });
             }

@@ -69,10 +69,10 @@ module.exports = {
         let instance = await this.contracts.Peershare.deployed();
 
         // web3.eth.accounts.sign is used to sign the hashed data with private key
-        const signedHash = web3.eth.accounts.sign(userHash, privateKey);
+        //const signedHash = web3.eth.accounts.sign(userHash, privateKey);
 
         // Get the signature
-        const signature = signedHash.signature;
+        //const signature = signedHash.signature;
 
         // return await instance.addUser(
         //     ethAccount, signedHash, signature,
