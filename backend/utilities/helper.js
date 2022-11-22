@@ -2,7 +2,7 @@ const passwordHash = require('password-hash');
 const UserDAO      = require('../model/UserDAO');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
-const PeerContract = require('../blockchain/scripts/PeerContract');
+const PeerContract = require('../blockchain/scripts/PeerContractTest');
 const crypto    = require('crypto');
 
 async function validate (formData, rules) {
@@ -105,7 +105,7 @@ async function validate (formData, rules) {
 
         // Verify ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
-            PeerContract.init();
+            //PeerContract.init();
             if (PeerContract.verifyAccount(data.eth_account, data.eth_private_key) === false) {
                 errors.push({ message: 'Could not connect to Ethereum account.', field: 'ethereum_address' });
             }
@@ -113,8 +113,10 @@ async function validate (formData, rules) {
 
         //verify if user is not already registered with the ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {
-            PeerContract.init();
-            if (await PeerContract.getUser(data.eth_account) != '-1' ) {
+            //PeerContract.init();
+            var idx = await PeerContract.getUser(data.eth_account);
+            console.log(await idx);
+            if (await idx != '1000' ) {
                 console.log('user found');
                 errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
             }

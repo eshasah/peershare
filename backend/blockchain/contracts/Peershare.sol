@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // pragma solidity ^0.8.11;
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.5.0;
 import "./ECDSA.sol";
 
 // smart contract to add new user, new cars and any ride on the blockchain
@@ -17,20 +17,24 @@ contract Peershare {
     // payment transaction
     mapping(address => uint256) private balances;
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event AddUser(address indexed user);
+    event AddCar(bytes ownerSignature, bytes32 carHash);
+    event RentCar(bytes borrowerSignature, bytes32 carHash);
+    event ReturnCar(bytes borrowerSignature, bytes32 carHash);
 
     function getUserCount() public view returns (uint256) {
-        return userCount;
+        return uint256(userCount);
     }
 
-    function getUser(address ethereumAddress) public view returns (address) {
-        address res = address(0x0);
+    function getUser(address ethereumAddress) public view returns (uint256) {
+        uint256 res = 1000;
         // Verify if the user is unique in blockchain
         for (uint256 i = 0; i < userCount; i++) {
             if (activeUsers[i] == ethereumAddress) {
-                res = activeUsers[i];
+                res = i;
             }
         }
-        return res;
+        return uint256(res);
     }
 
     function addUser(
@@ -44,6 +48,8 @@ contract Peershare {
 
         //storing signature
         userSignature[userHash] = signature;
+
+        emit AddUser(ethereumAddress);
         return true;
     }
 
@@ -64,7 +70,8 @@ contract Peershare {
         );
 
         ownerSignature[carHash] = signature;
-        return true;
+        emit AddCar(signature, carHash);
+        return bool(true);
     }
 
     function rentCar(
@@ -102,7 +109,7 @@ contract Peershare {
 
         // Add borrower signature
         borrowerSignature[carHash] = signature;
-
+        emit RentCar(signature, carHash);
         return true;
     }
 
@@ -140,7 +147,7 @@ contract Peershare {
 
         // Delete the borrower signature for the car
         delete borrowerSignature[carHash];
-
+        emit ReturnCar(borrowerSignature[carHash], carHash);
         return true;
     }
 

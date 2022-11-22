@@ -34,6 +34,7 @@
     "web3": "^1.8.0"
   },
   "devDependencies": {
+    "hardhat": "^2.12.2",
     "nodemon": "^2.0.19"
   }
 }

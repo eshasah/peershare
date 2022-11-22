@@ -3,7 +3,7 @@ const UserDAO = require('../model/UserDAO');
 const CarDAO = require('../model/CarDAO');
 const Validator = require('../utilities/helper');
 const crypto = require('crypto');
-const PeerContract = require('../blockchain/scripts/PeerContract');
+const PeerContract = require('../blockchain/scripts/PeerContractTest');
 
 var UserController = module.exports = {
 
@@ -17,7 +17,7 @@ var UserController = module.exports = {
         } else {
             const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
             // Add to database
-            PeerContract.init();
+            //PeerContract.init();
             PeerContract.addUser(userHash, data.eth_account, data.eth_private_key).then(
                 async transactionResult => {
                     await UserDAO.addUser(data);

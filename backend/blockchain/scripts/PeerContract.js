@@ -64,29 +64,35 @@ module.exports = {
         }
     },
 
+    getUserCount: async function(){
+        let instance = await this.contracts.Peershare.deployed();
+        var count = await instance.getUserCount();
+        console.log((await count).toString());
+    },
+
     addUser: async function(userHash, ethAccount, privateKey) {
         //console.log("PeerContract -> Calling smart contract addUser to insert new block");
         let instance = await this.contracts.Peershare.deployed();
 
         // web3.eth.accounts.sign is used to sign the hashed data with private key
-        //const signedHash = web3.eth.accounts.sign(userHash, privateKey);
+        const signedHash = web3.eth.accounts.sign(userHash, privateKey);
 
         // Get the signature
-        //const signature = signedHash.signature;
+        const signature = signedHash.signature;
 
-        // return await instance.addUser(
-        //     ethAccount, signedHash, signature,
-        //     { from: ethAccount, gas: 3000000 }
-        // );
+        return await instance.addUser(
+            ethAccount, signedHash, signature,
+            { from: ethAccount, gas: 3000000 }
+        );
 
-        return true;
+        // return true;
     },
 
     getUser: async function(ethAccount) {
         //console.log("PeerContract -> Calling smart contract getUser to check if already registered");
         let instance = await this.contracts.Peershare.deployed();
         let i = -1;
-        //i = await instance.getUser(ethAccount);
+        i = await instance.getUser(ethAccount);
         return i;
     }, 
 

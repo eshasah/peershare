@@ -47,3 +47,8 @@ app.use('/user', userRouter);
 app.use('/car', carRouter);
 app.use('/ride', rideRouter);
 app.use('/txn',txnRouter);
+
+// Get Smart contract
+const PeerContract = require('./blockchain/scripts/PeerContractTest');
+// PeerContract.init();
+PeerContract.getUserCount();
