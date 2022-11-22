@@ -46,6 +46,9 @@ CREATE TABLE IF NOT EXISTS cars (
       REFERENCES users(user_id)
       ON UPDATE CASCADE ON DELETE RESTRICT
 ) ;
+
+alter table cars auto_increment = 3000;
+
 CREATE TABLE IF NOT EXISTS rides (
   ride_id int auto_increment NOT NULL,
   user_id int NOT NULL,
