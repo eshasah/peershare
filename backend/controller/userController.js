@@ -24,9 +24,10 @@ var UserController = module.exports = {
           
             let userDetails=req.body;
             userDetails.user_id=userData[0].insertId;
+            UserController.login(req, res);
                
-            console.log('user details:',userDetails);
-                    res.status(200).json({ userDetails: userDetails });
+            // console.log('user details:',userDetails);
+                    // res.status(200).json({ userDetails: userDetails });
             // PeerContract.addUser(userHash, data.eth_account, req.body.ethereum_private_key).then(
             //     async transactionResult => {
             //         await UserDAO.addUser(data);
@@ -49,23 +50,26 @@ var UserController = module.exports = {
         if (errors.length > 0) {
             res.status(400).json({ errors })
         } else {
-            console.log(data.email_id);
+            // console.log(data.email_id);
             const user = await UserDAO.getUserByEmail(data.email_id);
-            console.log('user:',user);
+            // console.log('user:',user);
 
             // Generate user token
             const token = jwt.sign(
                 {
                     id: user.user_id.toString(),
                     email: user.email_id,
-                    eth_account: user.eth_account
+                    // eth_account: user.eth_account
                 },
                 process.env.JWT_SECRET_KEY,
                 {
                     expiresIn: '7 days'
                 }
             );
+            data.token = token;
 
+            // Update user database
+            await UserDAO.updateUser(data, user.user_id);
             // Set token in cookie
             res.cookie('lg_token', token, { httpOnly: true });
 
