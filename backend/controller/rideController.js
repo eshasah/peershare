@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const UserDAO = require('../model/UserDAO');
 const CarDAO = require('../model/CarDAO');
 const RideDAO = require('../model/RideDAO');
-const PeerContract = require('../blockchain/scripts/PeerContract');
+const PeerContract = require('../blockchain/scripts/PeerContractTest');
 
 module.exports = {
 
@@ -29,7 +29,7 @@ module.exports = {
             // console.log(user)
             // console.log(car)
 
-            PeerContract.init();
+            //PeerContract.init();
             PeerContract.rentCar(car.hash, owner.eth_account, user.eth_account,user.eth_private_key).then(
                 async transactionResult => {
                     // Update car status
@@ -75,7 +75,7 @@ module.exports = {
 
                 //TODO: Add transaction to bloackchain
                 
-                PeerContract.init();
+                //PeerContract.init();
                 PeerContract.returnCar(car.hash,owner.eth_account, user.eth_account).then(
                     async transactionResult => {
 

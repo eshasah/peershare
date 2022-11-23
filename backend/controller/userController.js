@@ -18,6 +18,7 @@ var UserController = module.exports = {
             const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
             // Add to database
             //PeerContract.init();
+            PeerContract.addUser(userHash, data.eth_account);
             console.log('data:',data);
             console.log('hash:',userHash);
             const userData=await UserDAO.addUser(data);

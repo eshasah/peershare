@@ -34,9 +34,8 @@ const verifyAccount = (ethAccount, privateKey) => {
 const getUser = async (ethAccount) => {
         //console.log("PeerContract -> Calling smart contract getUser to check if already registered");
         //let instance = await this.contracts.Peershare.deployed();
-        let i = -1;
-        i = await contract.methods.getUser(ethAccount).call();
-
+        let i = await contract.methods.getUser(ethAccount).call();
+        console.log("getUser of peercontracttest ->")
         console.log(await i);
         return i;
     }
@@ -44,47 +43,108 @@ const getUser = async (ethAccount) => {
 const getUserCount = async () => {
     //let instance = await this.contracts.Peershare.deployed();
     var count = await contract.methods.getUserCount().call();
+    console.log("getUserCount of peercontracttest ->")
     console.log(await count);
 }
 
-const addUser = async (userHash, ethAccount, privateKey) => {
-        //console.log("PeerContract -> Calling smart contract addUser to insert new block");
-        //let instance = await this.contracts.Peershare.deployed();
-
-        // web3.eth.accounts.sign is used to sign the hashed data with private key
-        const signedHash = web3.eth.accounts.sign(userHash, privateKey);
-
-        // Get the signature
-        const signature = signedHash.signature;
-
-        const tx = await contract.methods.addUser(
-            ethAccount, signedHash, signature
-        ).call();
-        
-        await tx;
-        console.log(tx);
-        // const receipt = await tx
-        // .send({
-        //     from: signer.address,
-        //     gas: await tx.estimateGas(),
-        // })
-        // .once("transactionHash", (txhash) => {
-        //     console.log(`Mining transaction ...`);
-        //     console.log(`https://goerli.etherscan.io/tx/${txhash}`);
-        // });
-        // //The transaction is now on chain!
-        // connsole.log(`Mined in block ${receipt.blockNumber}`);
-        return true;
-    }
-
-const printReceipt =  () => {
-
+const addUser = async (userHash, ethAccount) => {
+    console.log("addUser calling.")
+    const tx = await contract.methods.addUser(
+        ethAccount, userHash
+    ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    .once("transaction", (txhash) =>{
+        console.log('Miningtransaction....');
+        console.log(`https://goerli.etherscan.io/tx/${txhash}`);
+    });
+    
+    await tx;
+    console.log("addUser returned.")
+    console.log(tx);
+    
+    return true;
 }
+
+const addCar = async (carHash, ethAccount, privateKey) => {
+    console.log("addCar calling.")
+    const tx = await contract.methods.addCar(
+        carHash,web3.eth.accounts.sign('0x'+ ethereumjsAbi.soliditySHA3(
+            ['bytes32', 'address'],
+            [carHash, ethAccount]
+        ).toString('hex'), privateKey).signature
+    ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    .once("transaction", (txhash) =>{
+        console.log('Miningtransaction....');
+        console.log(`https://goerli.etherscan.io/tx/${txhash}`);
+    });
+    
+    await tx;
+    console.log("addCar returned.")
+    console.log(tx);
+    
+    return true;
+}
+
+const rentCar = async (carHash, ownerEthAccount, ethAccount, privateKey) => {
+    console.log("rentCar calling.")
+    const tx = await contract.methods.rentCar(
+        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + ethereumjsAbi.soliditySHA3(
+            ['bytes32', 'address'],
+            [carHash, ethAccount]
+        ).toString('hex'), privateKey).signature
+    ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    .once("transaction", (txhash) =>{
+        console.log('Miningtransaction....');
+        console.log(`https://goerli.etherscan.io/tx/${txhash}`);
+    });
+    
+    await tx;
+    console.log("rentCar returned.")
+    console.log(tx);
+    
+    return true;
+}
+
+const returnCar = async (carHash,ownerEthAccount,ethAccount) => {
+    console.log("rentCar calling.")
+    const tx = await contract.methods.returnCar(carHash)
+    .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    .once("transaction", (txhash) =>{
+        console.log('Miningtransaction....');
+        console.log(`https://goerli.etherscan.io/tx/${txhash}`);
+    });
+    
+    await tx;
+    console.log("rentCar returned.")
+    console.log(tx);
+    
+    return true;
+}
+
+const transferMoney = async (sender, receiver, amount) => {
+    console.log("rentCar calling.")
+    const tx = await contract.methods.transferFrom(sender, receiver, amount)
+    .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    .once("transaction", (txhash) =>{
+        console.log('Miningtransaction....');
+        console.log(`https://goerli.etherscan.io/tx/${txhash}`);
+    });
+    
+    await tx;
+    console.log("rentCar returned.")
+    console.log(tx);
+    
+    return true;
+}
+
 module.exports = {
     verifyAccount,
     getUserCount,
     getUser,
     addUser,
+    addCar,
+    rentCar,
+    returnCar,
+    transferMoney,
 }
 
 // let provider = new HDWalletProvider({

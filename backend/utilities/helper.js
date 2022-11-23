@@ -95,7 +95,7 @@ async function validate (formData, rules) {
 
         // Validate ethereum private key
         if (formData.hasOwnProperty('ethereum_private_key')) {
-            console.log(formData.ethereum_private_key);
+            //console.log(formData.ethereum_private_key);
             data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
 
             if (data.eth_private_key.length != 66) {
@@ -116,7 +116,7 @@ async function validate (formData, rules) {
             //PeerContract.init();
             var idx = await PeerContract.getUser(data.eth_account);
             console.log(await idx);
-            if (await idx != '1000' ) {
+            if (await idx == '0' ) {
                 console.log('user found');
                 errors.push({ message: 'Ethereum account already registered', field: 'ethereum_address' });
             }

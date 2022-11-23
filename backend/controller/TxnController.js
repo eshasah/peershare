@@ -1,8 +1,11 @@
-const PeerContract = require("../blockchain/scripts/PeerContract");
+const PeerContract = require("../blockchain/scripts/PeerContractTest");
 
 const performPayment = async (req) => {
-    PeerContract.init();
-    PeerContract.transferMoney("0x4d262315d1A1228CBBD8516B8DB095E226a837Df","0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E",1000000)
+    const sender = "0x4d262315d1A1228CBBD8516B8DB095E226a837Df";
+    const receiver = "0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E";
+    const amount = 1000000;
+    //PeerContract.init();
+    PeerContract.transferMoney(sender, receiver, amount)
     .then(
         async transactionResult => {
             res.status(200).json({ data: transactionResult })

@@ -7,8 +7,8 @@ import "./ECDSA.sol";
 contract Peershare {
     // state variables
     //user registration
-    mapping(bytes32 => bytes) public userSignature;
-    mapping(uint256 => address) public activeUsers;
+    mapping(address => string) public userSignature;
+    mapping(address => bool) public activeUsers;
     uint256 userCount = 0;
     //car management
     mapping(bytes32 => bytes) public borrowerSignature;
@@ -27,27 +27,22 @@ contract Peershare {
     }
 
     function getUser(address ethereumAddress) public view returns (uint256) {
-        uint256 res = 1000;
-        // Verify if the user is unique in blockchain
-        for (uint256 i = 0; i < userCount; i++) {
-            if (activeUsers[i] == ethereumAddress) {
-                res = i;
-            }
+        if (activeUsers[ethereumAddress]) {
+            return uint256(0);
         }
-        return uint256(res);
+        return uint256(1);
     }
 
-    function addUser(
-        address ethereumAddress,
-        bytes32 userHash,
-        bytes memory signature
-    ) public returns (bool) {
+    function addUser(address ethereumAddress, string memory userHash)
+        public
+        returns (bool)
+    {
         // Add user address
         userCount = userCount + 1;
-        activeUsers[userCount] = ethereumAddress;
+        activeUsers[ethereumAddress] = true;
 
         //storing signature
-        userSignature[userHash] = signature;
+        userSignature[ethereumAddress] = userHash;
 
         emit AddUser(ethereumAddress);
         return true;
