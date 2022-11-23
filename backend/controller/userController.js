@@ -18,16 +18,20 @@ var UserController = module.exports = {
             const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
             // Add to database
             //PeerContract.init();
-            PeerContract.addUser(userHash, data.eth_account, data.eth_private_key).then(
-                async transactionResult => {
-                    await UserDAO.addUser(data);
-                    res.status(200).json({ data: transactionResult })
-                    // Login
-                    //UserController.login(req, res);
-                }
-            ).catch(err => {
-                console.log(err);
-            });
+            console.log('data:',data);
+            console.log('hash:',userHash);
+            await UserDAO.addUser(data);
+                    res.status(200).json({ data: 'success' });
+            // PeerContract.addUser(userHash, data.eth_account, req.body.ethereum_private_key).then(
+            //     async transactionResult => {
+            //         await UserDAO.addUser(data);
+            //         res.status(200).json({ data: transactionResult })
+            //         // Login
+            //         //UserController.login(req, res);
+            //     }
+            // ).catch(err => {
+            //     console.log(err);
+            // });
         }
     },
 
@@ -42,6 +46,7 @@ var UserController = module.exports = {
         } else {
             console.log(data.email_id);
             const user = await UserDAO.getUserByEmail(data.email_id);
+            console.log('user:',user);
 
             // Generate user token
             const token = jwt.sign(
@@ -61,9 +66,9 @@ var UserController = module.exports = {
 
             res.status(200).json(
                 {
-                    data: {
-                        loggedin: true
-                    }
+                    
+                        userDetails: user
+                    
                 }
             );
 

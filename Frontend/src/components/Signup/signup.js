@@ -10,7 +10,8 @@ import { Form, Image } from 'react-bootstrap';
 import '../Navbar/navbar.css';
 import '../Constants'
 import { url } from '../Constants';
-
+import WAValidator from 'wallet-address-validator';
+//var WAValidator = require('wallet-address-validator');
 const saltRounds = 10;
 
 class Signup extends Component {
@@ -28,7 +29,11 @@ class Signup extends Component {
       redirecttohome: null,
       carColor:'',
       carNo:'',
-      carType:''
+      carType:'',
+      walletAddress:'',
+      walletPrivateKey:'',
+      walletAddressErrors:'',
+      walletPrivateKeyError:''
     };
 
     // Bind the handlers to this class
@@ -42,6 +47,8 @@ class Signup extends Component {
     this.carTypeChangeHandler = this.carTypeChangeHandler.bind(this);
     this.submitsignup = this.submitsignup.bind(this);
     this.carModelChangeHandler = this.carModelChangeHandler.bind(this);
+    this.walletAddrChangeHandler=this.walletAddrChangeHandler.bind(this);
+    this.walletPrivateKeyChangeHandler=this.walletPrivateKeyChangeHandler.bind(this);
   }
 
   carModelChangeHandler = (e) => {
@@ -99,13 +106,25 @@ class Signup extends Component {
       password: e.target.value,
     });
   };
+  walletAddrChangeHandler= (e) => {
+    this.setState({
+      walletAddress: e.target.value,
+    });
+  };
+  walletPrivateKeyChangeHandler= (e) => {
+    this.setState({
+      privateKey: e.target.value,
+    });
+  };
 
   isformvalid = () => {
+    console.log('is form valid');
     let formisvalid = true;
     const signuperrors = {
       firstnameerrors: '',
       emailerrors: '',
       passworderrors: '',
+      walletAddressErrors:''
     };
 
     const emailpattern =
@@ -113,7 +132,7 @@ class Signup extends Component {
     const pwdpattern =
       /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,50}$/;
 
-    const { firstname, email, password } = this.state;
+    const { firstname, email, password,walletAddress } = this.state;
 
     if (firstname.length === 0) {
       formisvalid = false;
@@ -135,6 +154,10 @@ class Signup extends Component {
         'Password is not valid and must contain minimum 8 characters with a numeric, special character , lower and upper case letters!';
       console.log(signuperrors.passworderrors);
     }
+    if(!WAValidator.validate(walletAddress,'ETH')){
+      formisvalid = false;
+      signuperrors.walletAddressErrors= 'Please enter valid Wallet Address';
+    }
     this.setState((prevstate) => ({
       ...prevstate,
       ...signuperrors,
@@ -151,17 +174,18 @@ class Signup extends Component {
 
   // submit Login handler to send a request to the node backend
   submitsignup = async (e) => {
-    alert("Signup Successful. Please Login");
-    const redirectVar1 = <Redirect to='/login' />;
-    this.setState({ redirecttohome: redirectVar1 });
-    return;
+    
+   // alert("Signup Successful. Please Login");
+    // const redirectVar1 = <Redirect to='/login' />;
+    // this.setState({ redirecttohome: redirectVar1 });
+    // return;
     
     // prevent page from refresh
     e.preventDefault();
-    const formisvalidated = this.isformvalid();
+    const formisvalidated = await this.isformvalid();
     console.log(formisvalidated);
     if (formisvalidated) {
-      const { firstname, lastname, userrole, email, password, carType, carNo, carColor} = this.state;
+      const { firstname, lastname, userrole, email, password, carType, carNo, carColor,walletAddress,walletPrivateKey} = this.state;
      
       const data = {
         // firstname,
@@ -169,16 +193,20 @@ class Signup extends Component {
         // userrole,
         // email,        
         // encryptpassword: await bcrypt.hash(password, saltRounds),
-        firstName:firstname,
-        lastName:lastname,
+        first_name:firstname,
+        last_name:lastname,
         userrole:userrole == '' ? 'user' : userrole,
         email: email,
         password: password,
+        confirm_password:password,
+        ethereum_address:walletAddress,
+        ethereum_private_key:walletPrivateKey,
+        user_type:'rider'
         //password:await bcrypt.hash(this.state.password, saltRounds),        
       }
      
       var path = url;    
-      path += '/signup'; 
+      path += '/user/register'; 
       
       console.log(data);
       // set the with credentials to true
@@ -222,8 +250,8 @@ class Signup extends Component {
             // sessionStorage.setItem('useremail', resemail);
             // sessionStorage.setItem('profilepic', resprofilepic);
             alert("Signup Successful. Please Login");
-            const redirectVar1 = <Redirect to='/login' />;
-            this.setState({ redirecttohome: redirectVar1 });
+         //   const redirectVar1 = <Redirect to='/login' />;
+           // this.setState({ redirecttohome: redirectVar1 });
           } else {
             this.setState({
               redirecttohome: null,
@@ -242,7 +270,7 @@ class Signup extends Component {
     // if (cookie.load('cookie')) {
     //   redirectVar = <Redirect to='/dashboard' />;
     // }
-    const { firstnameerrors, emailerrors, passworderrors, userrole } =
+    const { firstnameerrors, emailerrors, passworderrors, userrole, walletAddressErrors, walletPrivateKeyError } =
       this.state;
     const { redirecttohome } = this.state;
     return (
@@ -320,6 +348,50 @@ class Signup extends Component {
                     </span>
                   )}
                 </div>
+
+                <div className='form-group'>
+                  <label htmlFor='walletAddress'>
+                    Here’s my Wallet Address:
+                    <input
+                      type='text'
+                      onChange={this.walletAddrChangeHandler}
+                      className='form-control'
+                      name='walletAddress'
+                      placeholder='Wallet Address'
+                      required
+                      formNoValidate
+                    />
+                  </label>
+                  <br />
+                  {walletAddressErrors && (
+                    <span className='errmsg' style={{ color: 'maroon' }}>
+                      {' '}
+                      {walletAddressErrors}{' '}
+                    </span>
+                  )}
+                </div>
+                <div className='form-group'>
+                  <label htmlFor='walletPrivateKey'>
+                    Here’s my Wallet Private Key:
+                    <input
+                      type='text'
+                      onChange={this.walletPrivateKeyChangeHandler}
+                      className='form-control'
+                      name='walletPrivateKey'
+                      placeholder='Wallet Private Key'
+                      required
+                      formNoValidate
+                    />
+                  </label>
+                  <br />
+                  {walletPrivateKeyError && (
+                    <span className='errmsg' style={{ color: 'maroon' }}>
+                      {' '}
+                      {walletPrivateKeyError}{' '}
+                    </span>
+                  )}
+                </div>
+
                 <div className='form-group'>
                   <label htmlFor='username'>
                     And here’s my password:

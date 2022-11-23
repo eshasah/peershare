@@ -78,7 +78,7 @@ async function validate (formData, rules) {
     // Validate user type
     if (formObj.hasOwnProperty('user_type')) {
         data.user_type = formObj.user_type;
-        if (formObj.user_type != 'driver' && formObj.user_type != 'rider') {
+        if (formObj.user_type != 'driver' && formObj.user_type != 'rider' && formObj.user_type !='user') {
             errors.push({ message: 'User type is invalid.', field: 'user_type' });
         }
     }
@@ -94,14 +94,14 @@ async function validate (formData, rules) {
         }
 
         // Validate ethereum private key
-        if (formData.hasOwnProperty('ethereum_private_key')) {
-            console.log(formData.ethereum_private_key);
-            data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
+        // if (formData.hasOwnProperty('ethereum_private_key')) {
+        //     console.log(formData.ethereum_private_key);
+        //     data.eth_private_key = (formData.ethereum_private_key.substring(0, 2) != '0x') ? '0x' + formData.ethereum_private_key : formData.ethereum_private_key;
 
-            if (data.eth_private_key.length != 66) {
-                errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
-            }
-        }
+        //     if (data.eth_private_key.length != 66) {
+        //         errors.push({ message: 'Invalid Ethereum private key.', field: 'ethereum_private_key' });
+        //     }
+        // }
 
         // Verify ethereum account
         if (data.hasOwnProperty('eth_account') && data.hasOwnProperty('eth_private_key')) {

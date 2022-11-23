@@ -51,45 +51,45 @@ class Login extends Component {
     const { email, password } = this.state;
     var redirectVar1 = '';
 
-    sessionStorage.setItem('userid', '1');    
-    sessionStorage.setItem('useremail', email);
-    //sessionStorage.setItem('profilepic', resprofilepic);
-    sessionStorage.setItem('userPhone', '6697865436');
-    sessionStorage.setItem('birthday', '09/10/1997');
-    sessionStorage.setItem('gender', 'Male');
+    // sessionStorage.setItem('userid', '1');    
+    // sessionStorage.setItem('useremail', email);
+    // //sessionStorage.setItem('profilepic', resprofilepic);
+    // sessionStorage.setItem('userPhone', '6697865436');
+    // sessionStorage.setItem('birthday', '09/10/1997');
+    // sessionStorage.setItem('gender', 'Male');
 
-    if(email.indexOf('admin') != -1)
-    {
-      sessionStorage.setItem('firstName', 'admin1');
-      sessionStorage.setItem('lastName', '');
-      sessionStorage.setItem('userType', 'admin');
-      redirectVar1 = <Redirect to='/home-admin' />;
-    }
-    else if(email.indexOf('user') != -1)
-    {
-      sessionStorage.setItem('firstName', 'user1');
-      sessionStorage.setItem('lastName', '');
-      sessionStorage.setItem('userType', 'user');
-      redirectVar1 = <Redirect to='/home-user' />;
-    }
-    else if(email.indexOf('owner') != -1)
-    {
-      sessionStorage.setItem('firstName', 'owner1');
-      sessionStorage.setItem('lastName', '');
-      sessionStorage.setItem('userType', 'carowner');
-      redirectVar1 = <Redirect to='/home-owner' />;
-    }
-    else
-    {
-      alert("Internal Server Error");
-    }
+    // if(email.indexOf('admin') != -1)
+    // {
+    //   sessionStorage.setItem('firstName', 'admin1');
+    //   sessionStorage.setItem('lastName', '');
+    //   sessionStorage.setItem('userType', 'admin');
+    //   redirectVar1 = <Redirect to='/home-admin' />;
+    // }
+    // else if(email.indexOf('user') != -1)
+    // {
+    //   sessionStorage.setItem('firstName', 'user1');
+    //   sessionStorage.setItem('lastName', '');
+    //   sessionStorage.setItem('userType', 'user');
+    //   redirectVar1 = <Redirect to='/home-user' />;
+    // }
+    // else if(email.indexOf('owner') != -1)
+    // {
+    //   sessionStorage.setItem('firstName', 'owner1');
+    //   sessionStorage.setItem('lastName', '');
+    //   sessionStorage.setItem('userType', 'carowner');
+    //   redirectVar1 = <Redirect to='/home-owner' />;
+    // }
+    // else
+    // {
+    //   alert("Internal Server Error");
+    // }
     //const redirectVar1 = <Redirect to='/home-user' />;
     //const redirectVar1 = <Redirect to='/home-owner' />;
 
-    this.setState({
-      redirecttohome: redirectVar1,
-    });
-    return;
+    // this.setState({
+    //   redirecttohome: redirectVar1,
+    // });
+    //return;
     //const { email, password } = this.state;
     if (email === '') {
       alert('Please enter email address');
@@ -117,28 +117,29 @@ class Login extends Component {
     // set the with credentials to true
     axios.defaults.withCredentials = true;
     // make a post request with the user data
+    
     axios
-      .get(url + '/login?email=' + data.email + '&password=' + data.password)
+      .post(url + '/user/login',data)
       .then((response) => {
         console.log('Status Code : ', response.status);
         console.log('response ', response.data);
 
         if (response.status === 200) {
-          if(response.data == false)
-          {
-            alert("Please enter valid credentials");
-            return;
-          }
+          // if(response.data == false)
+          // {
+          //   alert("Please enter valid credentials");
+          //   return;
+          // }
           console.log(response.data);
-          const resuserid = response.data[0].UserID;
-          const resfirstname = response.data[0].FirstName;
-          const resemail = response.data[0].Email;
-          const userType = response.data[0].UserRole;
-          const resprofilepic = response.data[0].ProfilePicture;
-          const lastName = response.data[0].LastName;
-          const userPhone = response.data[0].UserPhone;
-          const birthday = response.data[0].Birthday;
-          const gender = response.data[0].Gender;
+          const resuserid = response.data.userDetails.user_id;
+          const resfirstname = response.data.userDetails.f_name;
+          const resemail = response.data.userDetails.email_id;
+          const userType = response.data.userDetails.user_type;
+          const resprofilepic = response.data.userDetails.img;
+          const lastName = response.data.userDetails.l_name;
+          const userPhone = response.data.userDetails.phone_number;
+          //const birthday = response.data[0].Birthday;
+          //const gender = response.data[0].Gender;
           sessionStorage.setItem('userid', resuserid);
           sessionStorage.setItem('firstName', resfirstname);
           sessionStorage.setItem('lastName', lastName);
@@ -146,8 +147,8 @@ class Login extends Component {
           sessionStorage.setItem('profilepic', resprofilepic);
           sessionStorage.setItem('userType', userType);
           sessionStorage.setItem('userPhone', userPhone);
-          sessionStorage.setItem('birthday', birthday);
-          sessionStorage.setItem('gender', gender);
+          //sessionStorage.setItem('birthday', birthday);
+          //sessionStorage.setItem('gender', gender);
 
           //alert(response.data.token.accessToken);
           //const authToken = response.data.token.accessToken;
@@ -187,7 +188,7 @@ class Login extends Component {
         }
       })
       .catch((err) => {
-        //console.log(err.response.data);
+        console.log(err);
         alert("Please enter valid credentials");
         // this.setState({
         //   errorMessage: err.response.data,
