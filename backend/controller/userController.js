@@ -20,8 +20,13 @@ var UserController = module.exports = {
             //PeerContract.init();
             console.log('data:',data);
             console.log('hash:',userHash);
-            await UserDAO.addUser(data);
-                    res.status(200).json({ data: 'success' });
+            const userData=await UserDAO.addUser(data);
+          
+            let userDetails=req.body;
+            userDetails.user_id=userData[0].insertId;
+               
+            console.log('user details:',userDetails);
+                    res.status(200).json({ userDetails: userDetails });
             // PeerContract.addUser(userHash, data.eth_account, req.body.ethereum_private_key).then(
             //     async transactionResult => {
             //         await UserDAO.addUser(data);

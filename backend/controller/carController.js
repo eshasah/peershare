@@ -17,15 +17,20 @@ module.exports = {
         const user = await UserDAO.getUserById(postData.user_id);
         // Add to database
         // console.log(user);
-        PeerContract.init();
-        PeerContract.addCar(postData.hash, user.eth_account,user.eth_private_key).then(
-            async transactionResult => {
-                await CarDAO.addCar(postData);
-                res.status(200).json({ data: transactionResult })
-            }
-        ).catch(err => {
-            console.log(err);
-        });
+
+        const car= await CarDAO.addCar(postData);
+        let carDetails=req.body;
+        carDetails.car_id=car[0].insertId;
+                res.status(200).json({ carDetails: carDetails });
+        // PeerContract.init();
+        // PeerContract.addCar(postData.hash, user.eth_account,user.eth_private_key).then(
+        //     async transactionResult => {
+        //        const car= await CarDAO.addCar(postData);
+        //         res.status(200).json({ carDetails: car })
+        //     }
+        // ).catch(err => {
+        //     console.log(err);
+        // });
     },
 
     getCarsList: async (req, res) => {

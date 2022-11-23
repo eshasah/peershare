@@ -195,13 +195,13 @@ class Signup extends Component {
         // encryptpassword: await bcrypt.hash(password, saltRounds),
         first_name:firstname,
         last_name:lastname,
-        userrole:userrole == '' ? 'user' : userrole,
+        userrole:userrole == 'user' ? 'user' : userrole,
         email: email,
         password: password,
         confirm_password:password,
         ethereum_address:walletAddress,
         ethereum_private_key:walletPrivateKey,
-        user_type:'rider'
+        user_type:userrole
         //password:await bcrypt.hash(this.state.password, saltRounds),        
       }
      
@@ -220,19 +220,33 @@ class Signup extends Component {
             console.log(response.data);
             if(this.state.userrole == 'carowner')
             {
+              console.log('owner:',this.state.userrole );
               const data1 = {
-                carNo :this.state.carNo,
-                carType: this.state.carType,
-                carModel: this.state.carModel,
-                carColor: this.state.carColor,               
-                userId: response.data.data[0].UserID
+                registration :this.state.carNo,
+                car_type: this.state.carType,
+                model: this.state.carModel,
+                color: this.state.carColor,               
+                user_id: response.data.userDetails.user_id
               }              
               
               axios
-              .post(url + "/registerVehicle", data1)
-              .then((response) => {
+              .post(url + '/car/add', data1)
+              .then((res) => {
+                if (response.status === 200) {
+                const registration=this.state.carNo;
+                const car_type=this.state.carType;
+                const model=this.state.carModel;
+                const color=this.state.carColor;
+                const car_id=res.data.carDetails.car_id;
+                sessionStorage.setItem('registration', registration);
+                sessionStorage.setItem('car_type', car_type);
+                sessionStorage.setItem('model', model);
+                sessionStorage.setItem('color', color);
+                sessionStorage.setItem('car_id', car_id);
+                }
+
               }).catch((err) => {
-                console.log(err.response);
+                console.log(err);
                 alert(err.response.data);
                 this.setState({
                   errorMessage: err.response.data,
@@ -241,17 +255,27 @@ class Signup extends Component {
             }
             
             // console.log(response.data.username);
-            // const resuserid = response.data.UserID;
-            // const resfirstname = response.data.FirstName;
-            // const resemail = response.data.Email;
-            // const resprofilepic = response.data.ProfilePicture;
-            // sessionStorage.setItem('userid', resuserid);
-            // sessionStorage.setItem('username', resfirstname);
-            // sessionStorage.setItem('useremail', resemail);
-            // sessionStorage.setItem('profilepic', resprofilepic);
+          const resuserid = response.data.userDetails.user_id;
+          const resfirstname = response.data.userDetails.first_name;
+          const resemail = response.data.userDetails.email;
+          const userType = response.data.userDetails.user_type;
+         // const resprofilepic = response.data.userDetails.img;
+          const lastName = response.data.userDetails.last_name;
+          const ethereumAddress = response.data.userDetails.ethereum_address;
+          const ethereumPrvKey = response.data.userDetails.ethereum_private_key;
+          //const birthday = response.data[0].Birthday;
+          //const gender = response.data[0].Gender;
+          sessionStorage.setItem('userid', resuserid);
+          sessionStorage.setItem('firstName', resfirstname);
+          sessionStorage.setItem('lastName', lastName);
+          sessionStorage.setItem('useremail', resemail);
+          //sessionStorage.setItem('profilepic', resprofilepic);
+          sessionStorage.setItem('userType', userType);
+          sessionStorage.setItem('ethereumAddress', ethereumAddress);
+          sessionStorage.setItem('ethereumPrvKey', ethereumPrvKey);
             alert("Signup Successful. Please Login");
-         //   const redirectVar1 = <Redirect to='/login' />;
-           // this.setState({ redirecttohome: redirectVar1 });
+            const redirectVar1 = <Redirect to='/login' />;
+            this.setState({ redirecttohome: redirectVar1 });
           } else {
             this.setState({
               redirecttohome: null,
@@ -259,7 +283,7 @@ class Signup extends Component {
           }
         })
         .catch((err) => {
-          console.log(err.response);
+          console.log(err);
           alert("Email already exists");          
         });
     }

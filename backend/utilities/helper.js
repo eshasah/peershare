@@ -78,7 +78,7 @@ async function validate (formData, rules) {
     // Validate user type
     if (formObj.hasOwnProperty('user_type')) {
         data.user_type = formObj.user_type;
-        if (formObj.user_type != 'driver' && formObj.user_type != 'rider' && formObj.user_type !='user') {
+        if (formObj.user_type != 'driver' && formObj.user_type != 'rider' && formObj.user_type !='user'&& formObj.user_type !='carowner') {
             errors.push({ message: 'User type is invalid.', field: 'user_type' });
         }
     }
