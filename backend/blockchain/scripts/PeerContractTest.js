@@ -1,6 +1,7 @@
 const Web3 = require("web3");
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 const fs = require("fs");
+const ethereumAbi = require('ethereumjs-abi')
 //  const artifact = require('../build/contracts/Peershare.json');
 const { abi } = JSON.parse(fs.readFileSync('blockchain/build/contracts/Peershare.json'));
 
@@ -67,7 +68,7 @@ const addUser = async (userHash, ethAccount) => {
 const addCar = async (carHash, ethAccount, privateKey) => {
     console.log("addCar calling.")
     const tx = await contract.methods.addCar(
-        carHash,web3.eth.accounts.sign('0x'+ abi.soliditySHA3(
+        carHash,web3.eth.accounts.sign('0x'+ ethereumAbi.soliditySHA3(
             ['bytes32', 'address'],
             [carHash, ethAccount]
         ).toString('hex'), privateKey).signature
@@ -87,7 +88,7 @@ const addCar = async (carHash, ethAccount, privateKey) => {
 const rentCar = async (carHash, ownerEthAccount, ethAccount, privateKey) => {
     console.log("rentCar calling.")
     const tx = await contract.methods.rentCar(
-        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + abi.soliditySHA3(
+        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + ethereumAbi.soliditySHA3(
             ['bytes32', 'address'],
             [carHash, ethAccount]
         ).toString('hex'), privateKey).signature
@@ -129,11 +130,7 @@ const transferMoney = async (sender, receiver, amount) => {
         console.log(`https://goerli.etherscan.io/tx/${txhash}`);
     });
     
-    await tx;
-    console.log("rentCar returned.")
-    console.log(tx);
-    
-    return true;
+    return tx;
 }
 const getBalance = async function(walletId){
     console.log(walletId);
