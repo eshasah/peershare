@@ -113,7 +113,7 @@ class Signup extends Component {
   };
   walletPrivateKeyChangeHandler= (e) => {
     this.setState({
-      privateKey: e.target.value,
+      walletPrivateKey: e.target.value,
     });
   };
 

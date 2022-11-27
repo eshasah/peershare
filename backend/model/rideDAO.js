@@ -28,10 +28,16 @@ const getCurrentRides = async (userId) => {
     return (rideQueryResults.length > 0) ? rideQueryResults : [];
 }
 
+const getRidesByCarId = async (carId) => {
+    const [rideQueryResults, rideQueryFields] = await DB.execute('SELECT * FROM rides WHERE car_id = ?', [carId]);
+    return (rideQueryResults.length > 0) ? rideQueryResults[0] : {}
+}
+
 module.exports = {
     addRide,
     cancelRide,
     getRides,
     getRideById,
-    getCurrentRides
+    getCurrentRides,
+    getRidesByCarId
 }

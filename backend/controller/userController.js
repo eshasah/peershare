@@ -131,5 +131,26 @@ var UserController = module.exports = {
             res.status(404).json({ message: 'User not found' });
         }
 
+    },
+    getUserInfo: async (req, res) => {
+
+      console.log("Req::",req);
+        const user = await UserDAO.getUserById(req.query.userId);
+
+        if (Object.keys(user).length > 0) {
+            res.status(200).json({
+                data: {
+                    user_id: user.user_id,
+                    f_name: user.f_name,
+                    l_name: user.l_name,
+                    email_id: user.email_id,
+                    eth_account: user.eth_account,
+                    user_type: user.user_type
+                }
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+
     }
 }

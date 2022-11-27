@@ -14,7 +14,14 @@ class HomePage extends Component {
     super(props);
     this.state = {
       carStatus: 'Idle',
-      amount:0
+      amount:0,
+      carModel:'',
+      carNo:'',
+      carColor:'',
+      carType:'',
+      carStatus:''
+
+
     };
   }
 
@@ -22,23 +29,26 @@ class HomePage extends Component {
     //API calls to get user data
     axios.defaults.withCredentials = true;
     // make a post request with the user data
+    
     axios
-      .get(url + '/getVehicleDetails?userId=' + sessionStorage.getItem('userid'))
+      .get(url + '/car/getByUserId?userId=' + sessionStorage.getItem('userid'))
       .then((response) => {
-        console.log('Status Code : ', response.status);
+       // console.log('Status Code : ', response.status);
         console.log('response ', response.data);
-        
+      
+     
           this.setState({
-            carModel: response.data[0].VehcileModel,
-            carNo: response.data[0].VehcileNum,
-            carColor: response.data[0].VehcileColor,
-            carType: response.data[0].VehicleType,
-            carStatus: response.data[0].VehcileScheduleStatus,
-          })
+            carModel: response.data.data[0].model,
+            carNo: response.data.data[0].registration,
+            carColor: response.data.data[0].color,
+            carType: response.data.data[0].car_type,
+            carStatus: response.data.data[0].status,
+          });
           console.log(response.data);
-          const vehicleId =  response.data[0].VehcileID;
+          console.log(this.state);
+          const vehicleId =  response.data[0].car_id;
           axios
-          .get(url + '/getVehicleRideDetails?vehicleId=' + vehicleId)
+          .get(url + '/ride/cars?carId=' + vehicleId)
           .then((response) => {
             console.log('Status Code : ', response.status);
             console.log('response ', response.data);
@@ -51,9 +61,9 @@ class HomePage extends Component {
 
               for(var i = 0; i < response.data.length; i++)
               {
-                const amount = response.data[i].RideStatus === 'booked' ? '-' : response.data[0].RideAmount;
-                html += '<tr><td>' + (i+1) +'</td><td>'+ response.data[0].RideOrigin + '</td><td>' + response.data[0].RideDestination + '</td><td>' + response.data[0].RideStartTime.substring(0, 10) + '</td><td>' + response.data[0].RideStatus + '</td><td>' + amount + '</td></tr>';                    
-                totalAmount += amount ==='-' ? 0 : response.data[0].RideAmount;
+                const amount = response.data[i].ride_status === 'booked' ? '-' : response.data[0].ride_amount;
+                html += '<tr><td>' + (i+1) +'</td><td>'+ response.data[0].source + '</td><td>' + response.data[0].destination + '</td><td>' + response.data[0].start_time.substring(0, 10) + '</td><td>' + response.data[0].ride_status + '</td><td>' + amount + '</td></tr>';                    
+                totalAmount += amount ==='-' ? 0 : response.data[0].ride_amount;
               }
               
               this.setState({amount: totalAmount});              
@@ -63,6 +73,7 @@ class HomePage extends Component {
             console.log(response.data);          
           })
           .catch((err) => {   
+            console.log(err);
             //alert("Something went wrong");            
           });
       
@@ -136,16 +147,12 @@ class HomePage extends Component {
                         {/* <td>BATTERY</td> */}
                     </tr>
                     <tr>
-                        <td>Toyota Corolla</td>
-                        <td>CA9876</td>
-                        <td>Red</td>
-                        <td>Sedan</td>
-                        <td>{this.state.carStatus}</td>    
-                        {/* <td>{this.state.carModel}</td>
+                        <td>{this.state.carModel}</td>
                         <td>{this.state.carNo}</td>
                         <td>{this.state.carColor}</td>
                         <td>{this.state.carType}</td>
-                        <td>{this.state.carStatus}</td>                         */}
+                        <td>{this.state.carStatus}</td>    
+                        
                     </tr>
                     {/* <tr>
                         <td>BMW X3</td>

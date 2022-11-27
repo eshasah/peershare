@@ -51,11 +51,12 @@ module.exports = {
     },
 
     getCar: async (req, res) => {
+        
         // Get car id
         const carId = req.body.car_id;
-
+    
         const car = await CarDAO.getCarById(carId);
-
+    
         if (Object.keys(car).length > 0) {
             res.status(200).json({ data: car });
         } else {
@@ -76,6 +77,21 @@ module.exports = {
         const cars = await CarDAO.getCarsByUserId(T.id);
 
         res.status(200).json({ data: cars });
-    }
+    },
+
+    getCarByUserId: async (req, res) => {
+        
+        console.log('req',req);
+        const userId = req.query.userId;
+        
+     
+        const car = await CarDAO.getCarsByUserId(userId);
+        if (Object.keys(car).length > 0) {
+            res.status(200).json({ data: car });
+        } else {
+            res.status(400).json({ message: 'Car not found.' });
+        }
+
+    },
 
 }
