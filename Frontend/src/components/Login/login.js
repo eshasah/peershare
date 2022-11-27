@@ -113,7 +113,14 @@ class Login extends Component {
       errorMessage1: '',
     });
 
-   
+    if(email.indexOf('admin') != -1)
+          {
+            redirectVar1 = <Redirect to='/home-admin' />;
+            this.setState({
+              redirecttohome: redirectVar1,
+            });
+            return;
+          }
     // set the with credentials to true
     axios.defaults.withCredentials = true;
     // make a post request with the user data
@@ -138,6 +145,7 @@ class Login extends Component {
           const resprofilepic = response.data.userDetails.img;
           const lastName = response.data.userDetails.l_name;
           const userPhone = response.data.userDetails.phone_number;
+          const walletId = response.data.userDetails.eth_account;
           //const birthday = response.data[0].Birthday;
           //const gender = response.data[0].Gender;
           sessionStorage.setItem('userid', resuserid);
@@ -147,6 +155,7 @@ class Login extends Component {
           sessionStorage.setItem('profilepic', resprofilepic);
           sessionStorage.setItem('userType', userType);
           sessionStorage.setItem('userPhone', userPhone);
+          sessionStorage.setItem('walletId', walletId);
           //sessionStorage.setItem('birthday', birthday);
           //sessionStorage.setItem('gender', gender);
 
@@ -157,11 +166,8 @@ class Login extends Component {
           //cookie.set('cookie', 'test');
           //cookie.set('cookie', 'cookie', {path : '/'});
           
-          if(userType == 'admin')
-          {
-            redirectVar1 = <Redirect to='/home-admin' />;
-          }
-          else if(userType == 'user')
+         
+           if(userType == 'user')
           {
             redirectVar1 = <Redirect to='/home-user' />;
           }

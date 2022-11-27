@@ -33,10 +33,18 @@ module.exports = {
         // });
     },
 
-    getCarsList: async (req, res) => {
+    getAvailableCarsList: async (req, res) => {
 
         // Get all available cars
         const cars = await CarDAO.getAvailableCars();
+
+        res.status(200).json({ data: cars });
+
+    },
+    getCarsList: async (req, res) => {
+
+        // Get all available cars
+        const cars = await CarDAO.getCars();
 
         res.status(200).json({ data: cars });
 

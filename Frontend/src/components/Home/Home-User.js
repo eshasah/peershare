@@ -26,58 +26,41 @@ class HomePageUser extends Component {
     });
     document.getElementById("divRide").style.display = '';   
 
-    return;
+    
     axios
-    .get(url + '/getAllVehicleDetails')
+    .get(url + '/car/getAvailableCarsList')
     .then((response) => {
         console.log('Status Code : ', response.status);
         console.log('response ', response.data);
            
-        if(response.data != false)
+        if(response.data.data[0].length > 0)
         {
-          var vehicleIndex = -1;
-           for(var i = 0; i < response.data.length; i++)
-           {
-             if(response.data[i].VehcileApprovalStatus === 'approved' && response.data[i].VehcileStatus === 'active' && response.data[i].VehcileScheduleStatus === 'idle' && response.data[i].VehicleType.toLowerCase() === carType.toLowerCase())             
-             {
-                vehicleIndex = i;
-                break;
-             }
+           var car = null;
+
+           for(var i = 0; i < response.data.data[0].length; i++) {
+            if(response.data.data[0][i].car_type == carType) {
+              car = response.data.data[0][i];  
+              break;
+            }
            }
 
-           if(vehicleIndex == -1)
-           {
-             alert("All vehicles of the selected type are busy. Please try again after sometime.");
-             return;
+           if(car == null) {
+            alert("All vehicles of the selected type are busy. Please try again after sometime.");
+            return;
            }
 
-           const sdArray = this.state.sdArray;
-           for(var index = 0; index < sdArray.length; index++) {
-               const src = sdArray[index][0];
-               const des = sdArray[index][1];
-
-               if((source === src && destination === des) || (source === des && destination === src)) {
-                 var fare = sdArray[index][3] / (0.75);
-                 this.setState({
-                   time: sdArray[index][3],
-                   fare: fare.toFixed(2)
-                 })
-               }
-           }
-
+           const carModel = car.model;
+           const carNumber = car.registration;
            const data = {
              userId : sessionStorage.getItem('userid'),
-              vehicleId : response.data[i].VehcileID,
-              source : source,
-              destination : destination,
-              fare : this.state.fare
-           }
+             vehicleId : car.car_id,
+             source : source,
+             destination : destination,
+             fare : this.state.fare
+          }
 
-           const carModel = response.data[i].VehcileModel;
-           const carNumber = response.data[i].VehcileNum;
-
-           axios
-          .post(url + '/bookRide', data)
+          axios
+          .post(url + '/ride/bookRide', data)
           .then((response) => {
             console.log('Status Code : ', response.status);
             console.log('response ', response.data);
@@ -97,21 +80,22 @@ class HomePageUser extends Component {
             }
             else
             {
-              //alert("Something went wrong");            
+              alert("Something went wrong");            
             }
              
             console.log(response.data);          
           })
           .catch((err) => {            
-            //alert("Something went wrong");            
+            alert("Something went wrong");            
           });
-
         }
-             
-        console.log(response.data);          
+        else {
+          alert("All vehicles of the selected type are busy. Please try again after sometime.");
+          return;
+        }  
      })
     .catch((err) => {            
-        //alert("Something went wrong");            
+        alert("Something went wrong");            
     });
   }
 
@@ -144,6 +128,10 @@ class HomePageUser extends Component {
     this.setState({
       sdArray: arr
     })
+
+
+    
+
   }
 
   render() {
@@ -184,7 +172,7 @@ class HomePageUser extends Component {
               Car Number : {this.state.carNo}<br/>
               Estimated time : {this.state.time} min<br/>
               Estimated Amount : {this.state.fare}$<br/>
-              Pickup Location : {this.state.location}
+              {/* Pickup Location : {this.state.location} */}
               </label>
             </div>
             

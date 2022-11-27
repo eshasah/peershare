@@ -15,10 +15,10 @@ class UserTripDetails extends Component {
   }
 
   componentDidMount(){
-    var html = document.getElementById('tblUserCarInfo').innerHTML;
-    html += '<tr><th>1</th><th>Santa Clara</th><th>San Francisco</th><th>5/24/2022</th><th>15$</th><th>Trip Booked</th></tr>';  
-    document.getElementById('tblUserCarInfo').innerHTML = html;
-    return;
+    // var html = document.getElementById('tblUserCarInfo').innerHTML;
+    // html += '<tr><th>1</th><th>Santa Clara</th><th>San Francisco</th><th>5/24/2022</th><th>15$</th><th>Trip Booked</th></tr>';  
+    // document.getElementById('tblUserCarInfo').innerHTML = html;
+    // return;
     //API calls to get user data
     axios.defaults.withCredentials = true;
     // make a post request with the user data
@@ -29,19 +29,30 @@ class UserTripDetails extends Component {
         console.log('response ', response.data);
         if (response.status === 200) {
           var html = document.getElementById('tblUserCarInfo').innerHTML;
-          var fare = 0;
+          //var fare = 0;
           for(var i = 0; i < response.data.length; i++){
-            fare += response.data[i].RideStatus === 'booked' ? 0 : response.data[i].RideAmount;
+            //fare += response.data[i].RideStatus === 'booked' ? 0 : response.data[i].RideAmount;
             const status = response.data[i].RideStatus === 'booked' ? '-' : response.data[i].RideAmount;
             html += "<tr><td>" + (i + 1) + "</td><td>" + response.data[i].RideOrigin+ "</td><td>" + response.data[i].RideDestination + "</td><td>" + response.data[i].RideStartTime.substring(0, 10) + "</td><td>" + status + "</td><td>" + response.data[i].RideStatus + "</td></tr>";   
           }
 
-          fare -= this.state.amount;
-          this.setState({
-            amount : fare * -1
-          })
+          //fare -= this.state.amount;
+          
 
           document.getElementById('tblUserCarInfo').innerHTML = html;
+
+          const data = {walletId: '0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c'};//sessionStorage.getItem('walletId')
+        axios
+        .get(url + '/txn/getBalance', data)
+        .then((response) => {
+          this.setState({
+            amount : ''//response.data[0]
+          })
+       
+        })
+        .catch((err) => {
+        //alert("Something went wrong");   
+        });
         }
         else {        
             //alert("Something went wrong");        

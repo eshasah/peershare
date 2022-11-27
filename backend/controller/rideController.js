@@ -10,40 +10,54 @@ module.exports = {
         // Get data from post
         // res.status(200).json({ data: 'Ride booked successfully.' });
         // Get token decoded
-        const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
+        //const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
         // // Get user
-        const user = await UserDAO.getUserById(T.id);
+        const user = await UserDAO.getUserById(req.body.userId);
         // // Get car id
-        const car_id = req.body.car_id;
+        const car_id = req.body.vehicleId;
+        const source = req.body.source;
+        const destination = req.body.destination;
+        const fare = req.body.fare;
+
         // // Get car
         // console.log(req.body.car_id);
         const car = await CarDAO.getCarById(car_id);
-        // console.log(car)
-        if (Object.keys(car).length > 0 && car.status == 'available') {
+
+        console.log(car + " : " + car.user_id);
+        if (Object.keys(car).length > 0) {
+            console.log(req.body.userId + " 28 " + req.body.source);
 
             // Get owner details
             const owner = await UserDAO.getUserById(car.user_id);
             // console.log(owner.eth_account);
             // Get user detail
-            const user = await UserDAO.getUserById(req.body.user_id);
+            console.log(car.user_id + " 34 " + owner);
+
+            const user = await UserDAO.getUserById(req.body.userId);
             // console.log(user)
             // console.log(car)
+            console.log(req.body.userId + " 37 " + req.body.source);
 
             //PeerContract.init();
-            PeerContract.rentCar(car.hash, owner.eth_account, user.eth_account,user.eth_private_key).then(
-                async transactionResult => {
+            // PeerContract.rentCar(car.hash, owner.eth_account, user.eth_account,user.eth_private_key).then(
+                 //async transactionResult => {
                     // Update car status
+                    console.log(req.body.userId + " 43 " + req.body.source);
+
                     await CarDAO.updateCar({ status: 'unavailable' }, car_id);
                     // Add ride information
-                    await RideDAO.addRide({ car_id: car_id, user_id: user.user_id });
+                    await RideDAO.addRide({ car_id: car_id, user_id: user.user_id, source: source, destination: destination, ride_amount: fare});
+                    res.status(200).json({ data: "Success" });
 
-                    res.status(200).json({ data: transactionResult });
-                }
-            ).catch(err => {
-                console.log(err);
-            });
+                    //res.status(200).json({ data: transactionResult });
+                //}
+            // ).catch(err => {
+            //     console.log(err);
+            // });
 
         } else {
+            console.log(req.body.userId + " : " + req.body.source);
+
             res.status(404).json({ message: "Car not found." });
         }
 
@@ -103,8 +117,7 @@ module.exports = {
     getRidesList: async (req, res) => {
 
         // Get all rides
-        const rides = await RideDAO.getRides();
-
+        const rides = await RideDAO.getRides(req.query.userId);
         res.status(200).json({ data: rides });
 
     },

@@ -9,13 +9,13 @@ const router = express.Router();
 const rideController = require('../controller/rideController');
 
 // Book Ride
-router.post('/book', auth.authenticate, rideController.bookRide);
+router.post('/bookRide', rideController.bookRide);
 
 // Complete a ride
 router.post('/complete', auth.authenticate, rideController.completeRide);
 
 // Get rides list
-router.get('/', rideController.getRidesList);
+router.get('/getUserTripDetails', rideController.getRidesList);
 
 // Get individual ride
 router.get('/get', rideController.getRide)
