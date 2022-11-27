@@ -135,6 +135,15 @@ const transferMoney = async (sender, receiver, amount) => {
     
     return true;
 }
+const getBalance = async function(walletId){
+    console.log(walletId);
+   
+  const balance = await contract.methods.getBalance(walletId).call();
+  const inwei=web3.utils.toWei(balance);
+  console.log('wei',inwei);
+  return balance;
+   
+}
 
 module.exports = {
     verifyAccount,
@@ -145,6 +154,7 @@ module.exports = {
     rentCar,
     returnCar,
     transferMoney,
+    getBalance
 }
 
 // let provider = new HDWalletProvider({
