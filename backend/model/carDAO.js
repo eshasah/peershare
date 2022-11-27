@@ -3,6 +3,7 @@ const moment = require('moment');
 
 const addCar = async (carData) => {
     carData.created_at = moment().format("YYYY-MM-DD");
+    carData.status = 'Available';
     return await DB.execute(mysql.format('INSERT INTO `cars` SET ?', carData));
 }
 

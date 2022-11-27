@@ -24,7 +24,7 @@ class HomePageUser extends Component {
       fare:'15',
       location:'Santa Clara State University'
     });
-    document.getElementById("divRide").style.display = '';   
+    //document.getElementById("divRide").style.display = '';   
 
     
     axios

@@ -12,7 +12,9 @@ const carController = require('../controller/carController');
 router.post('/add', auth.authenticate, carController.addCar);
 
 // Get cars list
-router.get('/', carController.getCarsList);
+router.get('/getAvailableCarsList', carController.getAvailableCarsList);
+
+router.get('/getCarsList', carController.getCarsList);
 
 // Get individual car
 router.get('/get', carController.getCar);

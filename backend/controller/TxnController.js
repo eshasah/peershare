@@ -19,7 +19,7 @@ const performPayment = async (req) => {
 
 },
 getBalance= async (req,res)=>{
-  const walletId=req.body.walletId;
+  const walletId=req.query.walletId;
   console.log(walletId);
 
   PeerContract.getBalance(walletId).then(response=>{console.log(response);

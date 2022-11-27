@@ -9,6 +9,6 @@ const transaction = require('../controller/TxnController');
 router.post('/payment', transaction.performPayment);
 
 //Get the balance
-router.post('/getBalance',transaction.getBalance);
+router.get('/getBalance',transaction.getBalance);
 
 module.exports = router;

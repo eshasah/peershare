@@ -67,7 +67,7 @@ const addUser = async (userHash, ethAccount) => {
 const addCar = async (carHash, ethAccount, privateKey) => {
     console.log("addCar calling.")
     const tx = await contract.methods.addCar(
-        carHash,web3.eth.accounts.sign('0x'+ ethereumjsAbi.soliditySHA3(
+        carHash,web3.eth.accounts.sign('0x'+ abi.soliditySHA3(
             ['bytes32', 'address'],
             [carHash, ethAccount]
         ).toString('hex'), privateKey).signature
@@ -87,7 +87,7 @@ const addCar = async (carHash, ethAccount, privateKey) => {
 const rentCar = async (carHash, ownerEthAccount, ethAccount, privateKey) => {
     console.log("rentCar calling.")
     const tx = await contract.methods.rentCar(
-        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + ethereumjsAbi.soliditySHA3(
+        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + abi.soliditySHA3(
             ['bytes32', 'address'],
             [carHash, ethAccount]
         ).toString('hex'), privateKey).signature

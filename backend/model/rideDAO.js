@@ -5,6 +5,7 @@ const addRide = async (rideData) => {
     // Add created date
     rideData.created_at  = moment().format("YYYY-MM-DD HH:mm:ss");
     rideData.returned_at = null;
+    rideData.ride_status = 'In Progress';
     return await DB.execute(mysql.format('INSERT INTO rides SET ?', rideData));
 }
 

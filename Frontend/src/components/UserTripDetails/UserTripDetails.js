@@ -23,17 +23,17 @@ class UserTripDetails extends Component {
     axios.defaults.withCredentials = true;
     // make a post request with the user data
     axios
-      .get(url + '/getUserTripDetails?userId=' + sessionStorage.getItem('userid'))
+      .get(url + '/ride/getUserTripDetails?userId=' + sessionStorage.getItem('userid'))
       .then((response) => {
         console.log('Status Code : ', response.status);
         console.log('response ', response.data);
         if (response.status === 200) {
           var html = document.getElementById('tblUserCarInfo').innerHTML;
           //var fare = 0;
-          for(var i = 0; i < response.data.length; i++){
+          for(var i = 0; i < response.data.data.length; i++){
             //fare += response.data[i].RideStatus === 'booked' ? 0 : response.data[i].RideAmount;
-            const status = response.data[i].RideStatus === 'booked' ? '-' : response.data[i].RideAmount;
-            html += "<tr><td>" + (i + 1) + "</td><td>" + response.data[i].RideOrigin+ "</td><td>" + response.data[i].RideDestination + "</td><td>" + response.data[i].RideStartTime.substring(0, 10) + "</td><td>" + status + "</td><td>" + response.data[i].RideStatus + "</td></tr>";   
+            //const status = response.data[i].RideStatus === 'booked' ? '-' : response.data[i].RideAmount;
+            html += "<tr><td>" + (i + 1) + "</td><td>" + response.data.data[i].source+ "</td><td>" + response.data.data[i].destination + "</td><td>" + response.data.data[i].created_at.substring(0, 10) + "</td><td>" + response.data.data[i].ride_amount + "</td><td>" + response.data.data[i].ride_status + "</td></tr>";   
           }
 
           //fare -= this.state.amount;
@@ -43,10 +43,10 @@ class UserTripDetails extends Component {
 
           const data = {walletId: '0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c'};//sessionStorage.getItem('walletId')
         axios
-        .get(url + '/txn/getBalance', data)
+        .get(url + '/txn/getBalance?walletId=' + '0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c')
         .then((response) => {
           this.setState({
-            amount : ''//response.data[0]
+            amount : response.data.balance
           })
        
         })
@@ -74,7 +74,7 @@ class UserTripDetails extends Component {
         <div id = "div1">
             {/* <input type="textbox" id="txtLanguage" defaultValue={} style=""/> */}
             <label style = {{marginLeft: "40%", marginTop: "12%", color:"white",fontSize:"21px", fontWeight:"100"}}>{sessionStorage.getItem('username')}</label><br/>
-            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Amount : ${this.state.amount}</label>
+            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Ether : {this.state.amount}</label>
             <button
               onClick={this.addMoney}
               class="btn btn-primary"
