@@ -20,5 +20,8 @@ router.get('/get', carController.getCar);
 // Get all cars by user id
 router.get('/all', auth.authenticate, carController.getCarsByUser);
 
+//Get Car by User Id
+router.get('/getByUserId',auth.authenticate, carController.getCarByUserId);
+
 
 module.exports = router;

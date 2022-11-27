@@ -23,4 +23,7 @@ router.get('/cars', auth.authenticate, userController.getCars);
 // Get user information
 router.get('/', auth.authenticate, userController.getUser);
 
+// Get user 
+router.get('/info', auth.authenticate, userController.getUserInfo);
+
 module.exports = router;

@@ -8,4 +8,7 @@ const transaction = require('../controller/TxnController');
 // Performs the transaction
 router.post('/payment', transaction.performPayment);
 
+//Get the balance
+router.post('/getBalance',transaction.getBalance);
+
 module.exports = router;

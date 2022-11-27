@@ -122,6 +122,15 @@ module.exports = {
             res.status(400).json({ message: 'Ride not found.' });
         }
 
-    }
+    },
+    getRidesForCar: async (req, res) => {
+
+        const carId=req.query.carId;
+        // Get all rides
+        const rides = await RideDAO.getRidesByCarId(carId);
+
+        res.status(200).json({ data: rides });
+
+    },
 
 }

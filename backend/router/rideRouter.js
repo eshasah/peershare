@@ -20,4 +20,9 @@ router.get('/', rideController.getRidesList);
 // Get individual ride
 router.get('/get', rideController.getRide)
 
+//Get Rides for car
+
+router.get('/cars',rideController.getRidesForCar);
+
+
 module.exports = router;

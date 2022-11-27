@@ -113,7 +113,7 @@ class Signup extends Component {
   };
   walletPrivateKeyChangeHandler= (e) => {
     this.setState({
-      privateKey: e.target.value,
+      walletPrivateKey: e.target.value,
     });
   };
 
@@ -446,7 +446,7 @@ class Signup extends Component {
                       value={userrole}
                       placeholder={userrole}
                       onChange={this.userroleChangeHandler}
-                      defaultValue = 'User'
+                      defaultValue = 'user'
                       style = {{marginLeft: "15%", width: "71%"}}
                     >
                       <option value='user'>User</option>
