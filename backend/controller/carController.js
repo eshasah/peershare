@@ -73,7 +73,7 @@ module.exports = {
 
     getCarByUserId: async (req, res) => {
         
-        console.log('req',req);
+        //console.log('req',req);
         const userId = req.query.userId;
         
      
