@@ -52,21 +52,21 @@ class HomePage extends Component {
           .then((response) => {
             console.log('Status Code : ', response.status);
             console.log('response ', response.data);
-            this.setState({amount: 0});              
+                          
            
             if(response.data != false)
             {
               var html = document.getElementById('tblRidesTaken').innerHTML;
-              var totalAmount = 0;
+              //var totalAmount = 0;
 
-              for(var i = 0; i < response.data.length; i++)
+              for(var i = 0; i < response.data.data.length; i++)
               {
-                const amount = response.data[i].ride_status === 'booked' ? '-' : response.data[0].ride_amount;
-                html += '<tr><td>' + (i+1) +'</td><td>'+ response.data[0].source + '</td><td>' + response.data[0].destination + '</td><td>' + response.data[0].start_time.substring(0, 10) + '</td><td>' + response.data[0].ride_status + '</td><td>' + amount + '</td></tr>';                    
-                totalAmount += amount ==='-' ? 0 : response.data[0].ride_amount;
+                //const amount = response.data[i].ride_status === 'booked' ? '-' : response.data[0].ride_amount;
+                html += '<tr><td>' + (i+1) +'</td><td>'+ response.data.data[i].source + '</td><td>' + response.data.data[i].destination + '</td><td>' + response.data.data[i].created_at.substring(0, 10) + '</td><td>' + response.data.data[i].ride_status + '</td><td>' + response.data.data[i].ride_amount + '</td></tr>';                    
+                //totalAmount += amount ==='-' ? 0 : response.data[0].ride_amount;
               }
               
-              this.setState({amount: totalAmount});              
+              //this.setState({amount: totalAmount});              
               document.getElementById('tblRidesTaken').innerHTML = html;
             }
              
