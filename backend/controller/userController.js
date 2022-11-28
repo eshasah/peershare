@@ -18,13 +18,14 @@ var UserController = module.exports = {
             const userHash = crypto.createHash('sha256').update(data.eth_account).digest('hex');
             // Add to database
             //PeerContract.init();
-            PeerContract.addUser(userHash, data.eth_account);
+            const tx = await PeerContract.addUser(userHash, data.eth_account);
             console.log('data:',data);
-            console.log('hash:',userHash);
+            console.log('tx:', tx);
             const userData=await UserDAO.addUser(data);
           
             let userDetails=req.body;
             userDetails.user_id=userData[0].insertId;
+        
             UserController.login(req, res);
                
             // console.log('user details:',userDetails);
@@ -77,7 +78,7 @@ var UserController = module.exports = {
             res.status(200).json(
                 {
                     
-                        userDetails: user
+                        userDetails: user,
                     
                 }
             );

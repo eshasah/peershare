@@ -3,6 +3,7 @@ const UserDAO = require('../model/UserDAO');
 const CarDAO = require('../model/CarDAO');
 const RideDAO = require('../model/RideDAO');
 const PeerContract = require('../blockchain/scripts/PeerContractTest');
+const txnController = require('./TxnController');
 
 module.exports = {
 
@@ -39,18 +40,26 @@ module.exports = {
             console.log(req.body.userId + " 37 " + req.body.source);
 
             //PeerContract.init();
-            PeerContract.rentCar(car.hash, owner.eth_account, user.eth_account,user.eth_private_key).then(
-                 async transactionResult => {
-                    //Update car status
-                    console.log(req.body.userId + " 43 " + req.body.source);
+           // console.log(car.hash,owner.eth_account, user.eth_account,user.eth_private_key);
+            PeerContract.rentCar(car.hash, user.eth_account).then(
+                
+                    async transactionResult => {
+                        //console.log("rent car tx:", transactionResult);
+                        //Update car status
+                        console.log(req.body.userId + " 43 " + req.body.source);
 
-                    await CarDAO.updateCar({ status: 'unavailable' }, car_id);
-                    //Add ride information
-                    await RideDAO.addRide({ car_id: car_id, user_id: user.user_id, source: source, destination: destination, ride_amount: fare});
-                    res.status(200).json({ data: "Success" });
+                        await CarDAO.updateCar({ status: 'unavailable' }, car_id);
+                        //Add ride information
+                        await RideDAO.addRide({ car_id: car_id, user_id: user.user_id, source: source, destination: destination, ride_amount: fare});
+                        
+                        const tx = await txnController.performPayment(user.eth_account,owner.eth_account,fare);
+                        console.log('tx money transfer:', tx.transactionHash);
+                        res.status(200).json({ data: "Success" });
 
-                    res.status(200).json({ data: transactionResult });
-                }
+                        //res.status(200).json({ data: transactionResult });
+                    }
+                
+                
             ).catch(err => {
                 console.log(err);
             });
@@ -90,7 +99,7 @@ module.exports = {
                 //TODO: Add transaction to bloackchain
                 
                 //PeerContract.init();
-                PeerContract.returnCar(car.hash,owner.eth_account, user.eth_account).then(
+                PeerContract.returnCar(car.hash, user.eth_account).then(
                     async transactionResult => {
 
                         // Update car status
