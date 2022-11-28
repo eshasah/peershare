@@ -46,7 +46,7 @@ class HomePage extends Component {
           });
           console.log(response.data);
           console.log(this.state);
-          const vehicleId =  response.data[0].car_id;
+          const vehicleId =  response.data.data[0].car_id;
           axios
           .get(url + '/ride/cars?carId=' + vehicleId)
           .then((response) => {
@@ -70,7 +70,20 @@ class HomePage extends Component {
               document.getElementById('tblRidesTaken').innerHTML = html;
             }
              
-            console.log(response.data);          
+            console.log(response.data);    
+            
+            axios
+            .get(url + '/txn/getBalance?walletId=' + sessionStorage.getItem('walletId'))//'0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c')
+            .then((response) => {
+              const dollars = response.data.balance * 1200;
+              this.setState({
+                amountEther : Math.round(response.data.balance * 100) / 100,
+                amount: Math.round(dollars)
+              })       
+            })
+            .catch((err) => {
+            //alert("Something went wrong");   
+            });
           })
           .catch((err) => {   
             console.log(err);
@@ -117,7 +130,9 @@ class HomePage extends Component {
             {/* <input type="textbox" id="txtLanguage" defaultValue={} style=""/> */}
             <label style = {{marginLeft: "40%", marginTop: "12%", color:"white",fontSize:"21px", fontWeight:"100"}}>{sessionStorage.getItem('username')}</label><br/>
             <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Amount : ${this.state.amount == ' ' ? 0 : this.state.amount}</label>
-            <button
+            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Ether : {this.state.amountEther == ' ' ? 0 : this.state.amountEther}</label>
+
+            {/* <button
               onClick={this.startRide}
               class="btn btn-primary"
               style={{
@@ -131,7 +146,7 @@ class HomePage extends Component {
               }}
             >
               Start Ride
-            </button>
+            </button> */}
         </div>
         <div style = {{marginTop:"3%", border: "1px solid", marginLeft:"15%", borderRadius:"15px"}}>
             <label id = "lblCarInfo">Car Information</label>

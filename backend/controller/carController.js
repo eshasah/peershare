@@ -11,7 +11,7 @@ module.exports = {
         let postData = req.body;
         // // Get token decoded
         //const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
-        postData.hash= '0x'+crypto.createHash('sha256').update(postData.model + postData.make + postData.user_id + (new Date()).getTime()).digest('hex');
+        postData.hash= '0x'+crypto.createHash('sha256').update(postData.model + postData.user_id + (new Date()).getTime()).digest('hex');
         // console.log(postData.hash);
         // // Get user
         const user = await UserDAO.getUserById(postData.user_id);

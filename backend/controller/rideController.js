@@ -51,7 +51,7 @@ module.exports = {
                         await CarDAO.updateCar({ status: 'unavailable' }, car_id);
                         //Add ride information
                         await RideDAO.addRide({ car_id: car_id, user_id: user.user_id, source: source, destination: destination, ride_amount: fare});
-                        
+                        console.log(fare);
                         const tx = await txnController.performPayment(user.eth_account,owner.eth_account,fare);
                         console.log('tx money transfer:', tx.transactionHash);
                         res.status(200).json({ data: "Success" });

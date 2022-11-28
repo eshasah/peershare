@@ -1,7 +1,7 @@
 const Web3 = require("web3");
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 const fs = require("fs");
-const ethereumAbi = require('ethereumjs-abi')
+//const ethereumAbi = require('ethereumjs-abi')
 //  const artifact = require('../build/contracts/Peershare.json');
 const { abi } = JSON.parse(fs.readFileSync('blockchain/build/contracts/Peershare.json'));
 
@@ -125,9 +125,11 @@ const returnCar = async (carHash, ethAccount) => {
 }
 
 const transferMoney = async (sender, receiver, amount) => {
-    console.log("rentCar calling.")
-    const tx = await contract.methods.transferFrom(sender, receiver, amount)
-    .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
+    console.log("Transfer money")
+    console.log(amount)
+    const tx = await contract.methods.transferFrom(sender, receiver, web3.utils.numberToHex(web3.utils.toWei('0.04', 'ether')))
+    .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000,value: web3.utils.numberToHex(web3.utils.toWei('0.04', 'ether')),
+})
     .once("transaction", (txhash) =>{
         console.log('Miningtransaction....');
         console.log(`https://goerli.etherscan.io/tx/${txhash}`);

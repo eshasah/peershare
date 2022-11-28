@@ -73,7 +73,7 @@ class HomePageUser extends Component {
              vehicleId : car.car_id,
              source : source,
              destination : destination,
-             fare : this.state.fare
+             fare : this.state.fare / 1200
           }
 
           axios
