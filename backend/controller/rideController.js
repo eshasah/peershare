@@ -8,32 +8,28 @@ const txnController = require('./TxnController');
 module.exports = {
 
     bookRide: async (req, res) => {
-        // Get data from post
-        // res.status(200).json({ data: 'Ride booked successfully.' });
-        // Get token decoded
-        //const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
         // // Get user
         const user = await UserDAO.getUserById(req.body.userId);
-        // // Get car id
+        // // Get ride info from request
         const car_id = req.body.vehicleId;
         const source = req.body.source;
         const destination = req.body.destination;
         const fare = req.body.fare;
 
         // // Get car
-        // console.log(req.body.car_id);
         const car = await CarDAO.getCarById(car_id);
 
         console.log(car + " : " + car.user_id);
+
         if (Object.keys(car).length > 0) {
             console.log(req.body.userId + " 28 " + req.body.source);
 
             // Get owner details
             const owner = await UserDAO.getUserById(car.user_id);
             // console.log(owner.eth_account);
-            // Get user detail
-            console.log(car.user_id + " 34 " + owner);
 
+            console.log(car.user_id + " 34 " + owner);
+            // Get user detail
             const user = await UserDAO.getUserById(req.body.userId);
             // console.log(user)
             // console.log(car)
@@ -41,24 +37,24 @@ module.exports = {
 
             //PeerContract.init();
            // console.log(car.hash,owner.eth_account, user.eth_account,user.eth_private_key);
+           // invoke the blockchain and use rentCar method on carHash and borrower ethAccount
             PeerContract.rentCar(car.hash, user.eth_account).then(
                 
                     async transactionResult => {
                         //console.log("rent car tx:", transactionResult);
-                        //Update car status
+                        
                         console.log(req.body.userId + " 43 " + req.body.source);
-
+                        //Update car status
                         await CarDAO.updateCar({ status: 'unavailable' }, car_id);
-                        //Add ride information
+                        //Add ride information to the database
                         await RideDAO.addRide({ car_id: car_id, user_id: user.user_id, source: source, destination: destination, ride_amount: fare});
                         console.log(fare);
+                        // add the transaction using transaction module
                         const tx = await txnController.performPayment(user.eth_account,owner.eth_account,fare);
                         console.log('tx money transfer:', tx.transactionHash);
                         res.status(200).json({ data: "Success" });
-
                         //res.status(200).json({ data: transactionResult });
                     }
-                
                 
             ).catch(err => {
                 console.log(err);
@@ -66,7 +62,6 @@ module.exports = {
 
         } else {
             console.log(req.body.userId + " : " + req.body.source);
-
             res.status(404).json({ message: "Car not found." });
         }
 

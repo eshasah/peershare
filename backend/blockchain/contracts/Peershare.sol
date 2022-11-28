@@ -57,6 +57,7 @@ contract Peershare {
         public
         returns (bool)
     {
+        // add owner to the owner map array
         ownerSignature[carHash] = owner;
         carCount = carCount + 1;
 
@@ -68,7 +69,7 @@ contract Peershare {
         public
         returns (bool)
     {
-        // Add borrower signature
+        // Add borrower to the borrower map array
         borrowerSignature[carHash] = borrower;
         emit RentCar(borrower, carHash);
         return true;

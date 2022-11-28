@@ -76,6 +76,7 @@ const addCar = async (carHash, ethAccount) => {
     console.log("addCar calling.")
     console.log('carhash:', carHash);
     console.log('owner:', ethAccount);
+    //the addCar method of our peershare smart contract which uses carHash and owner ethAccount
     const tx = await contract.methods.addCar(
         carHash, ethAccount
     ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
@@ -93,6 +94,7 @@ const addCar = async (carHash, ethAccount) => {
 
 const rentCar = async (carHash, ethAccount) => {
     console.log("rentCar calling.")
+    //the rentCar method of our peershare smart contract which uses carHash and borrower ethAccount
     const tx = await contract.methods.rentCar(
         carHash, ethAccount
     ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
@@ -110,6 +112,7 @@ const rentCar = async (carHash, ethAccount) => {
 
 const returnCar = async (carHash, ethAccount) => {
     console.log("rentCar calling.")
+    //the returnCar method of our peershare smart contract which uses carHash and borrower ethAccount
     const tx = await contract.methods.returnCar(carHash, ethAccount)
     .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
     .once("transaction", (txhash) =>{

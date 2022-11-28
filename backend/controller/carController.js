@@ -9,30 +9,20 @@ module.exports = {
     addCar: async (req, res) => {
         // Get data from post
         let postData = req.body;
-        // // Get token decoded
-        //const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
+        // generate sha256 hash for car module using car,owner and time info
         postData.hash= '0x'+crypto.createHash('sha256').update(postData.model + postData.user_id + (new Date()).getTime()).digest('hex');
-        // console.log(postData.hash);
+
         // // Get user
         const user = await UserDAO.getUserById(postData.user_id);
-        // Add to database
-        // console.log(user);
-
+        // invoke the blockchain and use addCar method on carHash and owner ethAccount
         const tx = await PeerContract.addCar(postData.hash, user.eth_account,user.eth_private_key);
         console.log('tx:', tx)
+        // addCar to the database
         const car= await CarDAO.addCar(postData);
         let carDetails=req.body;
+        // response 
         carDetails.car_id=car[0].insertId;
                 res.status(200).json({ carDetails: carDetails });
-        // PeerContract.init();
-        // PeerContract.addCar(postData.hash, user.eth_account,user.eth_private_key).then(
-        //     async transactionResult => {
-        //        const car= await CarDAO.addCar(postData);
-        //         res.status(200).json({ carDetails: car })
-        //     }
-        // ).catch(err => {
-        //     console.log(err);
-        // });
     },
 
     getAvailableCarsList: async (req, res) => {
