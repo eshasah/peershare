@@ -3,7 +3,7 @@ const UserDAO = require('../model/UserDAO');
 const CarDAO = require('../model/CarDAO');
 const crypto    = require('crypto');
 const moment    = require('moment');
-const PeerContract = require('../blockchain/scripts/PeerContract');
+const PeerContract = require('../blockchain/scripts/PeerContractTest');
 module.exports = {
 
     addCar: async (req, res) => {
@@ -18,6 +18,8 @@ module.exports = {
         // Add to database
         // console.log(user);
 
+        const tx = await PeerContract.addCar(postData.hash, user.eth_account,user.eth_private_key);
+        console.log('tx:', tx)
         const car= await CarDAO.addCar(postData);
         let carDetails=req.body;
         carDetails.car_id=car[0].insertId;

@@ -1,5 +1,4 @@
 const { response } = require("express");
-const Web3 = require('web3');
 const PeerContract = require("../blockchain/scripts/PeerContractTest");
 const performPayment = async (senderWalletId,receiverWalletId,amount) => {
 
@@ -7,16 +6,9 @@ const performPayment = async (senderWalletId,receiverWalletId,amount) => {
   //const receiver = "0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E";
   //const amount = 1000000;
   //PeerContract.init();
-  PeerContract.transferMoney(senderWalletId, receiverWalletId, amount)
-  .then(
-      async transactionResult => {
-        //  res.status(200).json({ data: transactionResult })
-      }).catch(err => {
-              console.log(err);
-          });
-  
- // console.log(receipt); 
-//  return 'Transaction Posted Successfully';   
+  const tx = await PeerContract.transferMoney(senderWalletId, receiverWalletId, amount)
+  console.log('tx', tx); 
+  return tx;   
 
 },
 getBalance= async (req,res)=>{
@@ -28,7 +20,7 @@ getBalance= async (req,res)=>{
       balance:response/1000000000000000000
     });
   });
- 
+
   
 
 }

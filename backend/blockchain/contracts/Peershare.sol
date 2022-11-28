@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 // pragma solidity ^0.8.11;
 pragma solidity ^0.5.0;
-import "./ECDSA.sol";
 
 // smart contract to add new user, new cars and any ride on the blockchain
 contract Peershare {
@@ -11,16 +10,18 @@ contract Peershare {
     mapping(address => bool) public activeUsers;
     uint256 userCount = 0;
     //car management
-    mapping(bytes32 => bytes) public borrowerSignature;
-    mapping(bytes32 => bytes) public ownerSignature;
-
+    mapping(string => address) public borrowerSignature;
+    mapping(string => address) public ownerSignature;
+    uint256 carCount = 0;
     // payment transaction
     mapping(address => uint256) private balances;
+
+    //events to broadcast the changes
     event Transfer(address indexed from, address indexed to, uint256 value);
     event AddUser(address indexed user);
-    event AddCar(bytes ownerSignature, bytes32 carHash);
-    event RentCar(bytes borrowerSignature, bytes32 carHash);
-    event ReturnCar(bytes borrowerSignature, bytes32 carHash);
+    event AddCar(address indexed owner, string carHash);
+    event RentCar(address indexed borrower, string carHash);
+    event ReturnCar(address indexed borrower, string carHash);
 
     function getUserCount() public view returns (uint256) {
         return uint256(userCount);
@@ -48,101 +49,38 @@ contract Peershare {
         return true;
     }
 
-    function addCar(bytes32 carHash, bytes memory signature)
+    function getCarCount() public view returns (uint256) {
+        return uint256(carCount);
+    }
+
+    function addCar(string memory carHash, address owner)
         public
         returns (bool)
     {
-        // Get signer from signature
-        address signer = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(
-                keccak256(abi.encodePacked(carHash, msg.sender))
-            ),
-            signature
-        );
-        require(
-            signer == msg.sender,
-            "Unauthorised signer has been dectected."
-        );
+        ownerSignature[carHash] = owner;
+        carCount = carCount + 1;
 
-        ownerSignature[carHash] = signature;
-        emit AddCar(signature, carHash);
+        emit AddCar(owner, carHash);
         return bool(true);
     }
 
-    function rentCar(
-        bytes32 carHash,
-        address ownerAddress,
-        bytes memory signature
-    ) public returns (bool) {
-        // Get address from owner signature
-        address _ownerAddress = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(
-                keccak256(abi.encodePacked(carHash, ownerAddress))
-            ),
-            ownerSignature[carHash]
-        );
-
-        // Verify the car belong to the right owner
-        require(
-            _ownerAddress == ownerAddress,
-            "Car does not belong to the owner."
-        );
-
-        // Get signer from signature
-        address signer = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(
-                keccak256(abi.encodePacked(carHash, msg.sender))
-            ),
-            signature
-        );
-
-        // Verify the borrower address
-        require(
-            signer == msg.sender,
-            "Unauthorised signer has been dectected."
-        );
-
-        // Add borrower signature
-        borrowerSignature[carHash] = signature;
-        emit RentCar(signature, carHash);
-        return true;
-    }
-
-    function returnCar(bytes32 carHash, address ownerAddress)
+    function rentCar(string memory carHash, address borrower)
         public
         returns (bool)
     {
-        // Get address from owner signature
-        address _ownerAddress = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(
-                keccak256(abi.encodePacked(carHash, ownerAddress))
-            ),
-            ownerSignature[carHash]
-        );
+        // Add borrower signature
+        borrowerSignature[carHash] = borrower;
+        emit RentCar(borrower, carHash);
+        return true;
+    }
 
-        // Verify the car belong to the right owner
-        require(
-            _ownerAddress == ownerAddress,
-            "Car does not belong to the owner."
-        );
-
-        // Get address from borrower signature
-        address _borrowerAddress = ECDSA.recover(
-            ECDSA.toEthSignedMessageHash(
-                keccak256(abi.encodePacked(carHash, msg.sender))
-            ),
-            borrowerSignature[carHash]
-        );
-
-        // Verify the car returning belong to the right borrower
-        require(
-            _borrowerAddress == msg.sender,
-            "Car does not belong to the borrower."
-        );
-
+    function returnCar(string memory carHash, address borrower)
+        public
+        returns (bool)
+    {
         // Delete the borrower signature for the car
         delete borrowerSignature[carHash];
-        emit ReturnCar(borrowerSignature[carHash], carHash);
+        emit ReturnCar(borrower, carHash);
         return true;
     }
 

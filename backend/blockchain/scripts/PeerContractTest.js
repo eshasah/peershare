@@ -60,18 +60,24 @@ const addUser = async (userHash, ethAccount) => {
     
     await tx;
     console.log("addUser returned.")
-    console.log(tx);
+    console.log('tx:', tx);
     
-    return true;
+    return tx.transactionHash;
 }
 
-const addCar = async (carHash, ethAccount, privateKey) => {
+const getCarCount = async () => {
+    //let instance = await this.contracts.Peershare.deployed();
+    var count = await contract.methods.getCarCount().call();
+    console.log("getCarCount of peercontracttest ->")
+    console.log(await count);
+}
+
+const addCar = async (carHash, ethAccount) => {
     console.log("addCar calling.")
+    console.log('carhash:', carHash);
+    console.log('owner:', ethAccount);
     const tx = await contract.methods.addCar(
-        carHash,web3.eth.accounts.sign('0x'+ ethereumAbi.soliditySHA3(
-            ['bytes32', 'address'],
-            [carHash, ethAccount]
-        ).toString('hex'), privateKey).signature
+        carHash, ethAccount
     ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
     .once("transaction", (txhash) =>{
         console.log('Miningtransaction....');
@@ -82,16 +88,13 @@ const addCar = async (carHash, ethAccount, privateKey) => {
     console.log("addCar returned.")
     console.log(tx);
     
-    return true;
+    return tx.transactionHash;
 }
 
-const rentCar = async (carHash, ownerEthAccount, ethAccount, privateKey) => {
+const rentCar = async (carHash, ethAccount) => {
     console.log("rentCar calling.")
     const tx = await contract.methods.rentCar(
-        carHash, ownerEthAccount, web3.eth.accounts.sign('0x' + ethereumAbi.soliditySHA3(
-            ['bytes32', 'address'],
-            [carHash, ethAccount]
-        ).toString('hex'), privateKey).signature
+        carHash, ethAccount
     ).send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
     .once("transaction", (txhash) =>{
         console.log('Miningtransaction....');
@@ -102,12 +105,12 @@ const rentCar = async (carHash, ownerEthAccount, ethAccount, privateKey) => {
     console.log("rentCar returned.")
     console.log(tx);
     
-    return true;
+    return tx.transactionHash;
 }
 
-const returnCar = async (carHash,ownerEthAccount,ethAccount) => {
+const returnCar = async (carHash, ethAccount) => {
     console.log("rentCar calling.")
-    const tx = await contract.methods.returnCar(carHash)
+    const tx = await contract.methods.returnCar(carHash, ethAccount)
     .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
     .once("transaction", (txhash) =>{
         console.log('Miningtransaction....');
@@ -118,7 +121,7 @@ const returnCar = async (carHash,ownerEthAccount,ethAccount) => {
     console.log("rentCar returned.")
     console.log(tx);
     
-    return true;
+    return tx.transactionHash;
 }
 
 const transferMoney = async (sender, receiver, amount) => {
@@ -134,12 +137,11 @@ const transferMoney = async (sender, receiver, amount) => {
 }
 const getBalance = async function(walletId){
     console.log(walletId);
-   
-  const balance = await contract.methods.getBalance(walletId).call();
-  const inwei=web3.utils.toWei(balance);
-  console.log('wei',inwei);
-  return balance;
-   
+    
+    const balance = await contract.methods.getBalance(walletId).call();
+    const inwei=web3.utils.toWei(balance);
+    console.log('wei',inwei);
+    return balance;
 }
 
 module.exports = {
@@ -151,37 +153,6 @@ module.exports = {
     rentCar,
     returnCar,
     transferMoney,
-    getBalance
+    getBalance,
+    getCarCount
 }
-
-// let provider = new HDWalletProvider({
-//     mnemonic:{
-//         phrase: process.env.MNEMONIC
-//     },
-//     //privateKeys: process.env.SIGNER_PRIVATE_KEY,
-//     providerOrUrl: 'https://goerli.infura.io/v3/c68b12f2513d4d8797525633ccc1ffbd',
-// })
-
-// var web3Provider = null;
-
-// async function init() {
-//     web3Provider = new Web3(provider);
-// }
-
-// const PeerContract = artifact.require("PeerContract");
-
-// contract("PeerContract", () => {
-//     it("has been deployed successfully", async () => {
-//         const peershare = await PeerContract.deployed();
-//         AuthenticatorAssertionResponse(peershare, "contract was not deployed");
-//     });
-// });
-
-// describe("getUserCount()", () => {
-//     it("returns 0", async () => {
-//         const peershare = await PeerContract.deployed();
-//         const expected = 0;
-//         const actual = await peershare.getUserCount();
-//         assert.equal(actual, expected, "return a value of 10 ether'");
-//     });
-// });
