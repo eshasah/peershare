@@ -12,7 +12,7 @@ const rideController = require('../controller/rideController');
 router.post('/bookRide', rideController.bookRide);
 
 // Complete a ride
-router.post('/complete', auth.authenticate, rideController.completeRide);
+router.post('/complete',  rideController.completeRide);
 
 // Get rides list
 router.get('/getUserTripDetails', rideController.getRidesList);

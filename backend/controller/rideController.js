@@ -70,7 +70,7 @@ module.exports = {
     completeRide: async (req, res) => {
 
         // Get token decoded
-        const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
+       // const T = jwt.verify(req.cookies.lg_token, process.env.JWT_SECRET_KEY);
 
         // Get ride id
         const rideId = req.body.ride_id;
@@ -98,10 +98,10 @@ module.exports = {
                     async transactionResult => {
 
                         // Update car status
-                        await CarDAO.updateCar({ status: 'available' }, car.car_id);
+                        await CarDAO.updateCar({ status: 'Available' }, car.car_id);
 
                         // Update ride
-                        await RideDAO.cancelRide({}, rideId);
+                        await RideDAO.cancelRide({ride_status: 'Completed'}, rideId);
 
                         res.status(200).json({ data: transactionResult });
                     }

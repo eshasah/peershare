@@ -15,10 +15,10 @@ router.post('/register', userController.register);
 router.post('/login', userController.login);
 
 // Check if logged in
-router.get('/login/check', auth.authenticate, userController.isLoggedin);
+router.get('/login/check',  userController.isLoggedin);
 
 // Get owner cars
-router.get('/cars', auth.authenticate, userController.getCars);
+router.get('/cars',  userController.getCars);
 
 // Get user information
 router.get('/', auth.authenticate, userController.getUser);

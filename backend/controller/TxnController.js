@@ -6,7 +6,7 @@ const performPayment = async (senderWalletId,receiverWalletId,amount) => {
   //const receiver = "0x3c0D14AAdc11C4F5af19e628bB0B9216248efB1E";
   //const amount = 1000000;
   //PeerContract.init();
-  amount *= 1000000;
+  //amount *= 1000000;
   const tx = await PeerContract.transferMoney(senderWalletId, receiverWalletId, amount)
   console.log('tx', tx); 
   return tx;   

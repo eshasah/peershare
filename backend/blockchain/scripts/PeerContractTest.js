@@ -111,7 +111,7 @@ const rentCar = async (carHash, ethAccount) => {
 }
 
 const returnCar = async (carHash, ethAccount) => {
-    console.log("rentCar calling.")
+    console.log("Return Car calling.")
     //the returnCar method of our peershare smart contract which uses carHash and borrower ethAccount
     const tx = await contract.methods.returnCar(carHash, ethAccount)
     .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000 })
@@ -128,10 +128,12 @@ const returnCar = async (carHash, ethAccount) => {
 }
 
 const transferMoney = async (sender, receiver, amount) => {
-    console.log("Transfer money")
-    console.log(amount)
-    const tx = await contract.methods.transferFrom(sender, receiver, web3.utils.numberToHex(web3.utils.toWei('0.04', 'ether')))
-    .send({ from: process.env.SIGNER_ADDRESS, gas: 3000000,value: web3.utils.numberToHex(web3.utils.toWei('0.04', 'ether')),
+    console.log("Transfer money calling")
+    console.log(amount.toString());
+   const hexAmount=web3.utils.numberToHex(web3.utils.toWei(amount.toString()));
+   console.log('hex amount',hexAmount);
+    const tx = await contract.methods.transferFrom(sender, receiver, web3.utils.numberToHex(web3.utils.toWei(amount.toString(), 'ether')))
+    .send({ from: process.env.SIGNER_ADDRESS, gas: 1000000,value: web3.utils.numberToHex(web3.utils.toWei(amount.toString(), 'ether')),
 })
     .once("transaction", (txhash) =>{
         console.log('Miningtransaction....');
