@@ -51,6 +51,23 @@ class HomePageUser extends Component {
 
            const carModel = car.model;
            const carNumber = car.registration;
+           var flag = false;
+           for(var i = 0; i < this.state.sdArray.length; i++) {
+              if(source == this.state.sdArray[i][0] && destination == this.state.sdArray[i][1]) {
+                this.setState({
+                  fare: this.state.sdArray[i][2]
+                })
+                flag = true;
+                break;
+              }
+           }
+
+           if(!flag) {
+            this.setState({
+              fare: 77.67
+            })
+           }
+
            const data = {
              userId : sessionStorage.getItem('userid'),
              vehicleId : car.car_id,
@@ -113,25 +130,21 @@ class HomePageUser extends Component {
         //API calls to get user data
     //document.getElementById("divRide").hide();
     const arr = [
-      ['Santa Clara', 'San Francisco', 103.84, 10],
-      ['Santa Clara', 'Los Angeles', 237.447, 20],
-      ['Santa Clara', 'Las Gatos', 125.104, 12],
-      ['Santa Clara', 'San Jose', 129.404, 13],
-      ['Santa Clara', 'Fremont', 96.86 , 15],
-      ['Santa Clara', 'San Francisco', 103.84, 10],
-      ['Los Angeles', 'San Francisco', 238.546 , 25],
-      ['Las Gatos', 'San Francisco', 164.4722, 18],
-      ['San Jose', 'San Francisco', 86.091, 7],
-      ['Fremont', 'San Francisco', 66.766, 5],     
+      ['Santa Clara', 'San Francisco', 53.84, 10],
+      ['Santa Clara', 'Los Angeles', 127.447, 20],
+      ['Santa Clara', 'Las Gatos', 75.104, 12],
+      ['Santa Clara', 'San Jose', 79.404, 13],
+      ['Santa Clara', 'Fremont', 66.86 , 15],
+      ['Santa Clara', 'San Francisco', 76.84, 10],
+      ['Los Angeles', 'San Francisco', 81.546 , 25],
+      ['Las Gatos', 'San Francisco', 77.4722, 18],
+      ['San Jose', 'San Francisco', 81.091, 7],
+      ['Fremont', 'San Francisco', 41.766, 5],     
     ]
     
     this.setState({
       sdArray: arr
     })
-
-
-    
-
   }
 
   render() {

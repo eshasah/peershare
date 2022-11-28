@@ -6,6 +6,11 @@ const getUserById = async (id) => {
     return (userQueryResults.length > 0) ? userQueryResults[0] : {};
 }
 
+const getAllUsers = async () => {
+    const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM users');
+    return (userQueryResults.length > 0) ? userQueryResults : {};
+}
+
 const getUserByEmail = async (email) => {
     const [userQueryResults, userQueryFields] = await DB.execute('SELECT * FROM users WHERE email_id = ?', [email]);
     return (userQueryResults.length > 0) ? userQueryResults[0] : {};
@@ -43,4 +48,5 @@ module.exports = {
     addUser,
     updateUser,
     updateUserToken,
+    getAllUsers
 }

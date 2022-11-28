@@ -20,9 +20,16 @@ class PieCharts extends Component {
   componentWillMount(){
     const allUsersInfo = JSON.parse(sessionStorage.getItem('allUsersInfo')); 
     const allCarsInfo = JSON.parse(sessionStorage.getItem('allCarsInfo')); 
-    var usersCount = 2;
+    var usersCount = 0;
     var adminsCount = 1;
-    var ownersCount = 3;
+    var ownersCount = 0;
+
+    for(var i = 0; i < allUsersInfo.length; i++) {
+      if(allUsersInfo[i].user_type == 'user')
+        usersCount += 1;
+      else
+        ownersCount += 1;  
+    }   
 
     // for(var i = 0; i < allUsersInfo.length; i++)
     // {
@@ -39,9 +46,16 @@ class PieCharts extends Component {
     //     ownersCount++;
     //   }
     // }
+    var VehcileScheduleStatusBooked = 0;
+    var VehcileScheduleStatusIdle = 0;
 
-    var VehcileScheduleStatusBooked = 1;
-    var VehcileScheduleStatusIdle = 2;
+    for(var i = 0; i < allCarsInfo.length; i++) {
+      if(allCarsInfo[i].status == 'available')
+        VehcileScheduleStatusIdle += 1;
+      else
+        VehcileScheduleStatusBooked += 1;  
+    }  
+   
 
     // for(var i = 0; i < allCarsInfo.length; i++)
     // {

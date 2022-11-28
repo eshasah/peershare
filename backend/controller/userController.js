@@ -152,5 +152,20 @@ var UserController = module.exports = {
             res.status(404).json({ message: 'User not found' });
         }
 
-    }
+    },
+
+    getAllUsersInfo: async (req, res) => {      
+          const user = await UserDAO.getAllUsers();
+  
+          if (Object.keys(user).length > 0) {
+              res.status(200).json({
+                  data: {
+                      user
+                  }
+              });
+          } else {
+              res.status(404).json({ message: 'User not found' });
+          }
+  
+      }
 }

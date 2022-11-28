@@ -26,4 +26,6 @@ router.get('/', auth.authenticate, userController.getUser);
 // Get user 
 router.get('/info', auth.authenticate, userController.getUserInfo);
 
+router.get('/getAllUsersInfo', userController.getAllUsersInfo);
+
 module.exports = router;

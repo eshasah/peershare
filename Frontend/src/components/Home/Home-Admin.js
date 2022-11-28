@@ -23,36 +23,36 @@ class HomePageAdmin extends Component {
 
     
     axios
-    .get(url + '/getAllVehicleDetails')
+    .get(url + '/car/getCarsList')
     .then((response) => {
         console.log('Status Code : ', response.status);
         console.log('response ', response.data);
            
         if(response.data != false)
         {
-           sessionStorage.setItem('allCarsInfo', JSON.stringify(response.data));
+           sessionStorage.setItem('allCarsInfo', JSON.stringify(response.data.data[0]));
            var carInfoHtml = document.getElementById('tblCarInfoAdmin').innerHTML;
-           for(var i = response.data.length - 1; i >= 0; i--)
+           for(var i = response.data.data[0].length - 1; i >= 0; i--)
            {
-			   if(response.data.length - i == 5)
-				   break;
-            carInfoHtml += '<tr><td>' + response.data[i].VehcileModel + '</td><td>' + response.data[i].VehcileNum+ '</td><td>' + response.data[i].VehcileColor+ '</td><td>' + response.data[i].VehicleType+ '</td><td>' + response.data[i].VehcileScheduleStatus+ '</td></tr>'
+			  //  if(response.data.data[0].length - i == 5)
+				//    break;
+            carInfoHtml += '<tr><td>' + response.data.data[0][i].model + '</td><td>' + response.data.data[0][i].registration+ '</td><td>' + (response.data.data[0][i].color == null ? 'black' : response.data.data[0][i].color)+ '</td><td>' + (response.data.data[0][i].make == null ? 'Sedan' : response.data.data[0][i].make)+ '</td><td>' + response.data.data[0][i].status+ '</td></tr>'
            }
            
            document.getElementById('tblCarInfoAdmin').innerHTML = carInfoHtml;
            axios
-           .get(url + '/getAllUserDetails')
+           .get(url + '/user/getAllUsersInfo')
            .then((response) => {
                console.log('Status Code : ', response.status);
                console.log('response ', response.data);
                   
                if(response.data != false)
                {
-                  sessionStorage.setItem('allUsersInfo', JSON.stringify(response.data));
+                  sessionStorage.setItem('allUsersInfo', JSON.stringify(response.data.data.user));
                   var userInfoHtml = document.getElementById('tblUserInfoAdmin').innerHTML;
-                  for(var i = 0; i < response.data.length; i++)
+                  for(var i = 0; i < response.data.data.user.length; i++)
                   {
-                    userInfoHtml += '<tr><td>' + response.data[i].FirstName + ' ' + response.data[i].LastName + '</td><td>' + response.data[i].UserRole+ '</td><td>' + response.data[i].Email+ '</td><td>' + response.data[i].UserPhone+ '</td></tr>';
+                    userInfoHtml += '<tr><td>' + response.data.data.user[i].f_name + ' ' + response.data.data.user[i].l_name + '</td><td>' + response.data.data.user[i].user_type+ '</td><td>' + response.data.data.user[i].email_id+ '</td><td>' + (response.data.data.user[i].eth_account)+ '</td></tr>';
                   }     
        
                   document.getElementById('tblUserInfoAdmin').innerHTML = userInfoHtml;                  
@@ -63,9 +63,6 @@ class HomePageAdmin extends Component {
            .catch((err) => {            
                //alert("Something went wrong");            
            });
-           
-
-
         }
              
         console.log(response.data);          
@@ -129,28 +126,7 @@ class HomePageAdmin extends Component {
                         <th>CAR COLOR</th>
                         <th>CAR TYPE</th>
                         <th>CAR STATUS</th>                        
-                    </tr>      
-                    <tr>
-                        <td>Toyota Corolla</td>
-                        <td>CA98765</td>
-                        <td>Red</td>
-                        <td>Sedan</td>
-                        <td>Booked  </td>                        
-                    </tr>   
-                    <tr>
-                        <td>Honda Civic</td>
-                        <td>CA54387</td>
-                        <td>Black</td>
-                        <td>Sedan</td>
-                        <td>Idle </td>                        
-                    </tr>        
-                    <tr>
-                        <td>Mazda CX5</td>
-                        <td>CA82635</td>
-                        <td>White</td>
-                        <td>SUV</td>
-                        <td>Idle </td>                        
-                    </tr>         
+                    </tr>                      
                 </table>
             </div>
         </div>
@@ -163,38 +139,8 @@ class HomePageAdmin extends Component {
                         <th>USERNAME</th>
                         <th>ROLE</th>
                         <th>EMAIL</th>
-                        <th>PHONE_NUMBER</th>                       
-                    </tr>    
-                    <tr>
-                        <td>User1</td>
-                        <td>End User</td>
-                        <td>user1@gmail.com</td>
-                        <td>+1 (669) 345-8765</td>                       
-                    </tr>                    
-                    <tr>
-                        <td>User2</td>
-                        <td>End User</td>
-                        <td>user2@gmail.com</td>
-                        <td>+1 (408) 845-8546</td>                       
-                    </tr>  
-                    <tr>
-                        <td>Owner1</td>
-                        <td>Car Owner</td>
-                        <td>owner1@gmail.com</td>
-                        <td>+1 (408) 234-2873</td>                       
-                    </tr> 
-                    <tr>
-                        <td>Owner2</td>
-                        <td>Car Owner</td>
-                        <td>owner2@gmail.com</td>
-                        <td>+1 (669) 365-1265</td>                       
-                    </tr> 
-                    <tr>
-                        <td>Owner3</td>
-                        <td>Car Owner</td>
-                        <td>owner3@gmail.com</td>
-                        <td>+1 (408) 823-8654</td>                       
-                    </tr> 
+                        <th>ETH_Account</th>                       
+                    </tr>                       
                 </table>
             </div>
         </div>

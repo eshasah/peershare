@@ -20,7 +20,7 @@ class Signup extends Component {
     this.state = {
       firstname: '',
       lastname: '',
-      userrole: '',
+      userrole: 'user',
       email: '',
       password: '',
       firstnameerrors: '',
@@ -265,14 +265,14 @@ class Signup extends Component {
           const ethereumPrvKey = response.data.userDetails.ethereum_private_key;
           //const birthday = response.data[0].Birthday;
           //const gender = response.data[0].Gender;
-          sessionStorage.setItem('userid', resuserid);
-          sessionStorage.setItem('firstName', resfirstname);
-          sessionStorage.setItem('lastName', lastName);
-          sessionStorage.setItem('useremail', resemail);
-          //sessionStorage.setItem('profilepic', resprofilepic);
-          sessionStorage.setItem('userType', userType);
-          sessionStorage.setItem('ethereumAddress', ethereumAddress);
-          sessionStorage.setItem('ethereumPrvKey', ethereumPrvKey);
+          // sessionStorage.setItem('userid', resuserid);
+          // sessionStorage.setItem('firstName', resfirstname);
+          // sessionStorage.setItem('lastName', lastName);
+          // sessionStorage.setItem('useremail', resemail);
+          // //sessionStorage.setItem('profilepic', resprofilepic);
+          // sessionStorage.setItem('userType', userType);
+          // sessionStorage.setItem('ethereumAddress', ethereumAddress);
+          // sessionStorage.setItem('ethereumPrvKey', ethereumPrvKey);
             alert("Signup Successful. Please Login");
             const redirectVar1 = <Redirect to='/login' />;
             this.setState({ redirecttohome: redirectVar1 });

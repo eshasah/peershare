@@ -43,12 +43,13 @@ class UserTripDetails extends Component {
 
           const data = {walletId: '0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c'};//sessionStorage.getItem('walletId')
         axios
-        .get(url + '/txn/getBalance?walletId=' + '0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c')
+        .get(url + '/txn/getBalance?walletId=' + sessionStorage.getItem('walletId'))//'0xe58A0dcADE74a3Ce842D5F0E360Fe9839b34f70c')
         .then((response) => {
+          const dollars = response.data.balance * 1200;
           this.setState({
-            amount : response.data.balance
-          })
-       
+            amountEther : Math.round(response.data.balance * 100) / 100,
+            amount: Math.round(dollars)
+          })       
         })
         .catch((err) => {
         //alert("Something went wrong");   
@@ -74,8 +75,9 @@ class UserTripDetails extends Component {
         <div id = "div1">
             {/* <input type="textbox" id="txtLanguage" defaultValue={} style=""/> */}
             <label style = {{marginLeft: "40%", marginTop: "12%", color:"white",fontSize:"21px", fontWeight:"100"}}>{sessionStorage.getItem('username')}</label><br/>
-            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Ether : {this.state.amount}</label>
-            <button
+            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Amount : ${this.state.amount}</label>
+            <label style = {{marginLeft:"23%", color:"white", fontSize:"21px", fontWeight:"100"}}>Available Ether : {this.state.amountEther}</label>
+            {/* <button
               onClick={this.addMoney}
               class="btn btn-primary"
               style={{
@@ -89,7 +91,7 @@ class UserTripDetails extends Component {
               }}
             >
               Add Money
-            </button>
+            </button> */}
         </div>
         <div style = {{marginTop:"3%", border: "1px solid", marginLeft:"15%", borderRadius:"15px"}}>
             <label id = "lblCarInfo">User Trip Details</label>

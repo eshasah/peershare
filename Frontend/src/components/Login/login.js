@@ -119,7 +119,15 @@ class Login extends Component {
             this.setState({
               redirecttohome: redirectVar1,
             });
-            return;
+
+          sessionStorage.setItem('userid', '1000000');
+          sessionStorage.setItem('firstName', 'admin1');
+          sessionStorage.setItem('lastName', '');
+          sessionStorage.setItem('useremail', email);
+          sessionStorage.setItem('profilepic', '');
+          sessionStorage.setItem('userType', 'admin');
+          sessionStorage.setItem('userPhone', '6696537652');
+          return;
           }
     // set the with credentials to true
     axios.defaults.withCredentials = true;
